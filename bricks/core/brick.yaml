@@ -31,3 +31,11 @@ vars:
     description: Your packageName
     default: Dash
     prompt: What is your name?
+  httpClient:
+    type: enum
+    description: "Which HTTP client to use"
+    values:
+      - pocketbase
+      - dio
+      - none     # “none” here represents your “null” case
+    default: none

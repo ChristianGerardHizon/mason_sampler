@@ -1,3 +1,4 @@
 {
-    "packageName":"mason_sampler"
+    "packageName":"mason_sampler",
+    "httpClient":"dio"
 }
