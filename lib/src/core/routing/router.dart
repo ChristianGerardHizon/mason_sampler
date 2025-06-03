@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart'
+import 'package:mason_sampler/src/core/routing/router.dart'
     show $appRoutes;
-import 'package:{{packageName.snakeCase()}}/src/core/utils/router_utils.dart';
+import 'package:mason_sampler/src/core/utils/router_utils.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

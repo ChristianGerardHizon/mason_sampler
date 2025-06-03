@@ -1,6 +1,6 @@
 
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:{{pakcageName.snakeCase()}}/src/core/models/pb_record.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/pb_record.dart';
 
 part '{{singular.snakeCase()}}.mapper.dart';
 

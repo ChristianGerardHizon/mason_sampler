@@ -27,6 +27,10 @@ A few resources to get you started if this is your first brick template:
 [7]: https://youtu.be/LXhgiF5HiQg
 
 <!-- Run this  -->
-mason make core -c tools/core_config.json                                     
-dart pub get ; dart run build_runner build --delete-conflicting-outputs
+mason make core -c tools/core_config.json
+dart pub get
+dart run build_runner build --delete-conflicting-outputs
 dart run slang
+
+<!-- nushell -->
+mason make core -c tools/core_config.json ; dart pub get ; dart run build_runner build --delete-conflicting-outputs; dart run slang

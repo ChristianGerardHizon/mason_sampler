@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/assets/i18n/strings.g.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
+import 'package:mason_sampler/src/core/assets/i18n/strings.g.dart';
+import 'package:mason_sampler/src/core/routing/router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -20,18 +18,11 @@ class Application extends HookConsumerWidget {
       saveThemesOnChange: true,
       loadThemeOnInit: true,
       themes: [
-        ///
-        /// Light Theme
-        ///
         AppTheme(
           id: 'light',
           description: 'Light Theme',
           data: ThemeData(brightness: Brightness.light, colorSchemeSeed: color),
         ),
-
-        ///
-        /// Dark Theme
-        ///
         AppTheme(
           id: 'dark',
           description: 'Dark Theme',
@@ -45,7 +36,9 @@ class Application extends HookConsumerWidget {
             return ResponsiveApp(
               builder: (context) {
                 return MaterialApp.router(
-                  locale: TranslationProvider.of(context).flutterLocale,
+                  locale: TranslationProvider.of(
+                    context,
+                  ).flutterLocale, // use provider
                   supportedLocales: AppLocaleUtils.supportedLocales,
                   localizationsDelegates: [
                     ...GlobalMaterialLocalizations.delegates,
@@ -53,6 +46,7 @@ class Application extends HookConsumerWidget {
                   debugShowCheckedModeBanner: false,
                   title: context.t.common.appName,
                   theme: theme,
+
                   routerConfig: ref.watch(routerProvider),
                 );
               },

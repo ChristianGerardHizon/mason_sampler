@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:{{packageName.snakeCase()}}/src/application.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/assets/i18n/strings.g.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/loggers/riverpod_logger.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/utils/window_utils.dart';
+import 'package:mason_sampler/src/application.dart';
+import 'package:mason_sampler/src/core/assets/i18n/strings.g.dart';
+import 'package:mason_sampler/src/core/loggers/riverpod_logger.dart';
+import 'package:mason_sampler/src/core/utils/window_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 Future<void> main() async {
