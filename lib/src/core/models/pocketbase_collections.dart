@@ -1,4 +1,6 @@
 class PocketBaseCollections {
+  static const customers = 'Customers';
+
   ///
   /// Default
   ///

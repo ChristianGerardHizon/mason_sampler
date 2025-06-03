@@ -1,4 +1,4 @@
-name: core
+name: pocketbase_feature
 description: A new brick created with the Mason CLI.
 
 # The following defines the brick repository url.
@@ -31,7 +31,13 @@ vars:
     description: Your packageName
     default: Dash
     prompt: What is your name?
-  hasPocketbase:
-    type: boolean
-    description: "Include Pocketbase Files?"
-    default: false
+  singular:
+    type: string
+    description: Feature name in singular form
+    default: Dash
+    prompt: Singular feature name?
+  plural:
+    type: string
+    description: Feature name in plural form
+    default: Dash
+    prompt: Singular plural name?

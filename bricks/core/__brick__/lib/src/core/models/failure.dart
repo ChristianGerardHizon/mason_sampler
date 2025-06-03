@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dart_mappable/dart_mappable.dart';
-{{#httpClientPocketbase}}
+{{#hasPocketbase}}
 import 'package:pocketbase/pocketbase.dart';
-{{/httpClientPocketbase}}
+{{/hasPocketbase}}
 
 part 'failure.mapper.dart';
 
@@ -19,14 +19,14 @@ sealed class Failure with FailureMappable {
     final error = message;
     var returnMessage = 'Something went wrong';
 
-    {{#httpClientPocketbase}}
+    {{#hasPocketbase}}
     if (error is ClientException) {
       print(error.toString());
       final defaultMessage = 'Server Request has failed';
       final data = error.response;
       returnMessage = data['message'] ?? defaultMessage;
     }
-    {{/httpClientPocketbase}}
+    {{/hasPocketbase}}
 
     if (error is JsonUnsupportedObjectError) {
       print(error.toString());
@@ -65,7 +65,7 @@ sealed class Failure with FailureMappable {
       return MapperFailure(error, stackTrace, 'mapper_error');
     }
 
-    {{#httpClientPocketbase}}
+    {{#hasPocketbase}}
     // Handle known auth-related errors
     if (error is ClientException) {
       final code = error.statusCode;
@@ -73,7 +73,7 @@ sealed class Failure with FailureMappable {
         return AuthFailure(error, stackTrace, 'auth_error');
       }
     }
-    {{/httpClientPocketbase}}
+    {{/hasPocketbase}}
 
     // Handle user-cancelled errors (e.g., platform cancel actions)
     if (error.toString().contains('User cancelled')) {
@@ -90,7 +90,7 @@ sealed class Failure with FailureMappable {
   }
 }
 
-{{#httpClientPocketbase}}
+{{#hasPocketbase}}
 @MappableClass()
 class PocketbaseFailure extends Failure with PocketbaseFailureMappable {
   const PocketbaseFailure([
@@ -99,7 +99,7 @@ class PocketbaseFailure extends Failure with PocketbaseFailureMappable {
     String? identifier,
   ]) : super(message, stackTrace, identifier);
 }
-{{/httpClientPocketbase}}
+{{/hasPocketbase}}
 
 @MappableClass()
 class AuthFailure extends Failure with AuthFailureMappable {

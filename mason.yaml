@@ -2,8 +2,8 @@
 # Run "mason get" to install all registered bricks.
 # To learn more, visit https://docs.brickhub.dev.
 bricks:
-  app_feature:
-    path: ./bricks/app_feature
+  pocketbase_feature:
+    path: ./bricks/pocketbase_feature
   core:
     path: ./bricks/core
 

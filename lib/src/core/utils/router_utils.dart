@@ -23,6 +23,9 @@ class RouterUtils {
     );
     if (isIgnored) return null;
 
+    // add redirect logic here
+    // return null if continue or return the path to redireect to that page
+
     // All checks passed, continue with normal routing
     return null;
   }

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dart_mappable/dart_mappable.dart';
 
+import 'package:pocketbase/pocketbase.dart';
+
 
 part 'failure.mapper.dart';
 
@@ -17,6 +19,13 @@ sealed class Failure with FailureMappable {
     final error = message;
     var returnMessage = 'Something went wrong';
 
+    
+    if (error is ClientException) {
+      print(error.toString());
+      final defaultMessage = 'Server Request has failed';
+      final data = error.response;
+      returnMessage = data['message'] ?? defaultMessage;
+    }
     
 
     if (error is JsonUnsupportedObjectError) {
@@ -57,6 +66,14 @@ sealed class Failure with FailureMappable {
     }
 
     
+    // Handle known auth-related errors
+    if (error is ClientException) {
+      final code = error.statusCode;
+      if (code == 401 || code == 403) {
+        return AuthFailure(error, stackTrace, 'auth_error');
+      }
+    }
+    
 
     // Handle user-cancelled errors (e.g., platform cancel actions)
     if (error.toString().contains('User cancelled')) {
@@ -73,6 +90,15 @@ sealed class Failure with FailureMappable {
   }
 }
 
+
+@MappableClass()
+class PocketbaseFailure extends Failure with PocketbaseFailureMappable {
+  const PocketbaseFailure([
+    dynamic message,
+    StackTrace? stackTrace,
+    String? identifier,
+  ]) : super(message, stackTrace, identifier);
+}
 
 
 @MappableClass()

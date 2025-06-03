@@ -1,4 +1,4 @@
 {
     "packageName":"mason_sampler",
-    "httpClient":"dio"
+    "hasPocketbase": true
 }
