@@ -2,6 +2,9 @@
 # Run "mason get" to install all registered bricks.
 # To learn more, visit https://docs.brickhub.dev.
 bricks:
-  app_features:
-    path: ./bricks/app_features
+  app_feature:
+    path: ./bricks/app_feature
+  core:
+    path: ./bricks/core
+
 
