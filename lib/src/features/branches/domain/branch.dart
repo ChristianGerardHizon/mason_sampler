@@ -2,12 +2,12 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:mason_sampler/src/core/models/pb_record.dart';
 
-part 'customer.mapper.dart';
+part 'branch.mapper.dart';
 
 @MappableClass()
-class Customer extends PbRecord with CustomerMappable {
+class Branch extends PbRecord with BranchMappable {
 
-  Customer({
+  Branch({
     required super.id,
     required super.collectionId,
     required super.collectionName,
@@ -17,8 +17,8 @@ class Customer extends PbRecord with CustomerMappable {
   });
 
   static fromMap(Map<String, dynamic> raw) {
-    return CustomerMapper.fromMap({...raw});
+    return BranchMapper.fromMap({...raw});
   }
 
-  static const fromJson = CustomerMapper.fromJson;
+  static const fromJson = BranchMapper.fromJson;
 }

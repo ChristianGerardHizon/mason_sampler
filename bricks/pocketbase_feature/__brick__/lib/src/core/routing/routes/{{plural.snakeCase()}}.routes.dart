@@ -1,6 +1,6 @@
 part of '../main.routes.dart';
 
-class {{plural.pascalCase()}}BranchData extends StatefulShellBranchDataData {
+class {{plural.pascalCase()}}BranchData extends StatefulShellBranchData {
   const {{plural.pascalCase()}}BranchData();
 
   static const routes = <TypeRouteData>[
@@ -10,6 +10,10 @@ class {{plural.pascalCase()}}BranchData extends StatefulShellBranchDataData {
   ];
 }
 
+
+///
+/// List
+///
 @TypedGoRoute<{{plural.pascalCase()}}PageRoute>(path: {{plural.pascalCase()}}PageRoute.path)
 class {{plural.pascalCase()}}PageRoute extends GoRouteData {
   const {{plural.pascalCase()}}PageRoute();
@@ -21,6 +25,9 @@ class {{plural.pascalCase()}}PageRoute extends GoRouteData {
   }
 }
 
+///
+/// Form
+///
 @TypedGoRoute<{{singular.pascalCase()}}FormPageRoute>(path: {{singular.pascalCase()}}FormPageRoute.path)
 class {{singular.pascalCase()}}FormPageRoute extends GoRouteData {
   const {{singular.pascalCase()}}FormPageRoute({this.id});
@@ -34,6 +41,9 @@ class {{singular.pascalCase()}}FormPageRoute extends GoRouteData {
   }
 }
 
+///
+/// Details
+/// 
 @TypedGoRoute<{{singular.pascalCase()}}PageRoute>(path: {{singular.pascalCase()}}PageRoute.path)
 class {{singular.pascalCase()}}PageRoute extends GoRouteData {
   const {{singular.pascalCase()}}PageRoute(this.id);

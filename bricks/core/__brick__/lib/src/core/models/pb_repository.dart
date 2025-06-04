@@ -67,3 +67,6 @@ abstract class PBAuthRepository<T> {
 }
 
 {{/hasPocketbase}}
+{{^hasPocketbase}}
+// TODO: delete me postgen
+{{/hasPocketbase}}

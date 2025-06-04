@@ -5,54 +5,91 @@ import 'package:mason/mason.dart';
 
 void run(HookContext context) {
   final rawPlural = context.vars['plural'];
+  final rawPackageName = context.vars['packageName'];
   if (rawPlural == null) {
     context.logger
         .warn('⚠ `plural` was not provided; skipping all injections.');
     return;
   }
-  final featureName = rawPlural.toString();
+  if (rawPackageName == null) {
+    context.logger
+        .warn('⚠ `packageName` was not provided; skipping all injections.');
+    return;
+  }
+  final plural = rawPlural.toString();
+  final packageName = rawPackageName.toString();
+  final pluralSnake = _toSnakeCase(plural);
+  final pluralPascal = _toPascalCase(plural);
+  final packageNameSnake = _toSnakeCase(packageName.toString());
 
-  _injectRoutePart(
+  // Example usage for routes:
+  injectLine(
     context: context,
-    featureName: featureName,
-    // Defaults:
-    // targetPath = 'lib/src/core/routing/main.routes.dart'
-    // marker = "part 'main.routes.g.dart';"
+    targetPath: 'lib/src/core/routing/main.routes.dart',
+    marker: "part 'main.routes.g.dart';",
+    newLine: "part 'routes/$plural.routes.dart';",
+    successMessage: 'Inserted route part for `$plural`',
+    alreadyExistsMessage: 'Route part for `$plural` already exists',
+    missingFileMessage: 'main.routes file not found',
   );
 
-  _injectPocketBaseConstant(
+  // add page to main.routes import
+  // Example usage for routes:
+  injectLine(
     context: context,
-    rawPlural: featureName,
-    // Defaults:
-    // targetPath = 'lib/src/core/models/pocketbase_collections.dart'
-    // className = 'PocketBaseCollections'
+    targetPath: 'lib/src/core/routing/main.routes.dart',
+    marker: "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+    newLine:
+        "import 'package:$packageName/src/features/$pluralSnake/presentation/pages/_index.dart';",
+    successMessage: 'Inserted import part for `$plural`',
+    alreadyExistsMessage: 'Import part for `$plural` already exists',
+    missingFileMessage: 'main.routes file not found',
+  );
+
+  // Example usage for PocketBase collections:
+  injectLine(
+    context: context,
+    targetPath: 'lib/src/core/models/pocketbase_collections.dart',
+    // Look for the opening of the class; we’ll insert right after this marker
+    marker: 'class PocketBaseCollections {',
+    newLine: '  static const $pluralSnake = \'$pluralPascal\';',
+    successMessage: 'Inserted PocketBase collection `$pluralSnake`',
+    alreadyExistsMessage: 'PocketBase collection `$pluralSnake` already exists',
+    missingFileMessage: 'PocketBase collections file not found',
   );
 
   context.logger.info('✅ post_gen: completed all injections.');
 }
 
-/// Inserts a `part 'routes/<featureName>.routes.dart';` line into
-/// `main.routes.dart`, immediately after [marker]. If [marker] is not found,
-/// it appends the line at the end. Ignores if the line already exists.
-void _injectRoutePart({
+/// A general-purpose function to inject [newLine] into a file at [targetPath].
+///
+/// - Looks for [marker] (exact match after trimming) in the file’s lines.
+///   • If found and [newLine] isn’t already present, inserts [newLine] immediately
+///     after that marker line.
+///   • If [marker] isn’t found, appends [newLine] at the end (unless already present).
+///   • If [newLine] is already in the file, logs [alreadyExistsMessage] and does nothing.
+///   • If [targetPath] doesn’t exist, logs [missingFileMessage] and does nothing.
+///
+/// You can customize the logged messages via [successMessage], [alreadyExistsMessage],
+/// and [missingFileMessage]. Icons (✓, ℹ, ⚠) are included for clarity.
+void injectLine({
   required HookContext context,
-  required String featureName,
-  String targetPath = 'lib/src/core/routing/main.routes.dart',
-  String marker = "part 'main.routes.g.dart';",
+  required String targetPath,
+  required String marker,
+  required String newLine,
+  required String successMessage,
+  required String alreadyExistsMessage,
+  required String missingFileMessage,
 }) {
-  final newLine = "part 'routes/$featureName.routes.dart';";
   final file = File(targetPath);
-
   if (!file.existsSync()) {
-    context.logger
-        .warn('⚠ File "$targetPath" not found. Skipping route injection.');
+    context.logger.warn('⚠ $missingFileMessage: `$targetPath`.');
     return;
   }
 
   final lines = file.readAsLinesSync();
   if (lines.contains(newLine)) {
-    context.logger
-        .info('ℹ `$newLine` already present in $targetPath. No changes made.');
+    context.logger.info('ℹ $alreadyExistsMessage.');
     return;
   }
 
@@ -64,57 +101,12 @@ void _injectRoutePart({
       ...lines.sublist(idx + 1),
     ];
     file.writeAsStringSync(updated.join('\n'));
-    context.logger
-        .info('✅ Inserted `$newLine` after `$marker` in $targetPath.');
+    context.logger.info('✓ $successMessage after marker `$marker`.');
   } else {
     final updated = [...lines, newLine];
     file.writeAsStringSync(updated.join('\n'));
-    context.logger.info(
-      '✅ Marker `$marker` not found. Appended `$newLine` to end of $targetPath.',
-    );
-  }
-}
-
-/// Inserts a `static const <snake> = '<Pascal>';` line into
-/// `pocketbase_collections.dart`, immediately inside the body of [className].
-/// If the class opening isn’t found, it inserts before the final closing brace.
-/// Ignores if the line already exists.
-void _injectPocketBaseConstant({
-  required HookContext context,
-  required String rawPlural,
-  String targetPath = 'lib/src/core/models/pocketbase_collections.dart',
-  String className = 'PocketBaseCollections',
-}) {
-  final snake = _toSnakeCase(rawPlural);
-  final pascal = _toPascalCase(rawPlural);
-  final newLine = '  static const $snake = \'$pascal\';';
-
-  final file = File(targetPath);
-  if (!file.existsSync()) {
     context.logger
-        .warn('⚠ File "$targetPath" not found. Skipping collection injection.');
-    return;
-  }
-
-  final originalContent = file.readAsStringSync();
-  if (originalContent.contains(newLine)) {
-    context.logger
-        .info('ℹ `$newLine` already present in $targetPath. No changes made.');
-    return;
-  }
-
-  final updatedContent = _injectConstantIntoClass(
-    originalContent: originalContent,
-    className: className,
-    constantLine: newLine,
-  );
-
-  if (updatedContent != originalContent) {
-    file.writeAsStringSync(updatedContent);
-    context.logger.info('✅ Inserted collection constant into $targetPath');
-  } else {
-    context.logger.info(
-        'ℹ Could not find class `$className` in $targetPath. No changes made.');
+        .info('✓ Marker `$marker` not found; appended `$newLine` to end.');
   }
 }
 
@@ -152,34 +144,4 @@ String _toPascalCase(String input) {
     return word[0].toUpperCase() + word.substring(1).toLowerCase();
   });
   return capitalized.join();
-}
-
-/// Inserts [constantLine] into the body of `class <className> { … }`.
-/// If it finds `class <className> {`, it inserts immediately after that opening brace.
-/// Otherwise, it tries to insert just before the final closing brace `}`. If neither
-/// spot is found or if [constantLine] already exists, returns the original content.
-String _injectConstantIntoClass({
-  required String originalContent,
-  required String className,
-  required String constantLine,
-}) {
-  final classOpeningPattern =
-      RegExp(r'(class\s+' + RegExp.escape(className) + r'\s*\{\s*)');
-
-  if (classOpeningPattern.hasMatch(originalContent)) {
-    return originalContent.replaceFirstMapped(
-      classOpeningPattern,
-      (match) => '${match.group(1)}\n$constantLine\n',
-    );
-  }
-
-  final closingBracePattern = RegExp(r'(\}\s*)$');
-  if (closingBracePattern.hasMatch(originalContent)) {
-    return originalContent.replaceFirstMapped(
-      closingBracePattern,
-      (match) => '  $constantLine\n${match.group(1)}',
-    );
-  }
-
-  return originalContent;
 }

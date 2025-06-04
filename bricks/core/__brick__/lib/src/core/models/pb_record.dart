@@ -25,3 +25,6 @@ abstract class PbRecord with PbRecordMappable {
   });
 }
 {{/hasPocketbase}}
+{{^hasPocketbase}}
+// TODO: delete me postgen
+{{/hasPocketbase}}

@@ -1,9 +1,9 @@
+import 'package:{{packageName.snakeCase()}}/src/core/models/fields/pb_field.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/pb_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/packages/pocketbase.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/packages/pocketbase_collections.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/pocketbase_collections.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/page_results.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/strings/fields.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.camelCase()}}/domain/{{singular.camelCase()}}.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -107,7 +107,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
       final batch = pb.createBatch();
       final batchCollection = batch.collection(_collectionName);
       for (final id in ids) {
-        batchCollection.update(id, body: {PBField.isDeleted: true});
+        batchCollection.update(id, body: {PbField.isDeleted: true});
       }
 
       await batch.send();

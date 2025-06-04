@@ -9,3 +9,6 @@ class PocketBaseCollections {
   
 }
 {{/hasPocketbase}}
+{{^hasPocketbase}}
+// TODO: delete me postgen
+{{/hasPocketbase}}

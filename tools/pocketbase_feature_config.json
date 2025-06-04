@@ -1,5 +1,5 @@
 {
     "packageName":"mason_sampler",
-    "singular":"customer",
-    "plural":"customers"
+    "singular":"branch",
+    "plural":"branches"
 }

@@ -1,38 +1,38 @@
+import 'package:mason_sampler/src/core/models/fields/pb_field.dart';
 import 'package:mason_sampler/src/core/models/pb_repository.dart';
 import 'package:mason_sampler/src/core/models/failure.dart';
 import 'package:mason_sampler/src/core/packages/pocketbase.dart';
-import 'package:mason_sampler/src/core/packages/pocketbase_collections.dart';
+import 'package:mason_sampler/src/core/models/pocketbase_collections.dart';
 import 'package:mason_sampler/src/core/models/page_results.dart';
-import 'package:mason_sampler/src/core/strings/fields.dart';
 import 'package:mason_sampler/src/core/models/type_defs.dart';
-import 'package:mason_sampler/src/features/customers/domain/customer.dart';
+import 'package:mason_sampler/src/features/branches/domain/branch.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'customer_repository.g.dart';
+part 'branch_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-PBCollectionRepository<Customer> customerRepository(Ref ref) {
-  return CustomerRepositoryImpl(pb: ref.watch(pocketbaseProvider));
+PBCollectionRepository<Branch> branchRepository(Ref ref) {
+  return BranchRepositoryImpl(pb: ref.watch(pocketbaseProvider));
 }
 
-class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
+class BranchRepositoryImpl extends PBCollectionRepository<Branch> {
   final PocketBase pb;
 
-  CustomerRepositoryImpl({required this.pb});
+  BranchRepositoryImpl({required this.pb});
   
-  String get _collectionName => PocketBaseCollections.customers;
+  String get _collectionName => PocketBaseCollections.branches;
 
   RecordService get collection => pb.collection(_collectionName);
 
-  Customer mapToData(Map<String, dynamic> map) {
-    return Customer.fromMap(map);
+  Branch mapToData(Map<String, dynamic> map) {
+    return Branch.fromMap(map);
   }
 
   @override
-  TaskResult<Customer> get(String id) {
+  TaskResult<Branch> get(String id) {
     return TaskResult.tryCatch(() async {
       final result = await collection.getOne(id);
       return mapToData(result.toJson());
@@ -40,7 +40,7 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
   }
 
   @override
-  TaskResult<Customer> create(
+  TaskResult<Branch> create(
     Map<String, dynamic> payload, {
     List<MultipartFile> files = const [],
   }) {
@@ -58,7 +58,7 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
   }
 
   @override
-  TaskResult<PageResults<Customer>> list({
+  TaskResult<PageResults<Branch>> list({
     String? filter,
     required int pageNo,
     required int pageSize,
@@ -76,7 +76,7 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
         perPage: result.perPage,
         totalItems: result.totalItems,
         totalPages: result.totalPages,
-        items: result.items.map<Customer>((e) {
+        items: result.items.map<Branch>((e) {
           return mapToData(e.toJson());
         }).toList(),
       );
@@ -84,8 +84,8 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
   }
 
   @override
-  TaskResult<Customer> update(
-    Customer history,
+  TaskResult<Branch> update(
+    Branch history,
     Map<String, dynamic> update, {
     List<MultipartFile> files = const [],
   }) {
@@ -107,7 +107,7 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
       final batch = pb.createBatch();
       final batchCollection = batch.collection(_collectionName);
       for (final id in ids) {
-        batchCollection.update(id, body: {PBField.isDeleted: true});
+        batchCollection.update(id, body: {PbField.isDeleted: true});
       }
 
       await batch.send();
@@ -115,14 +115,14 @@ class CustomerRepositoryImpl extends PBCollectionRepository<Customer> {
   }
 
   @override
-  TaskResult<List<Customer>> listAll({
+  TaskResult<List<Branch>> listAll({
     int batch = 500,
     String? filter,
     String? sort,
   }) {
     return TaskResult.tryCatch(() async {
       final result = await collection.getFullList(filter: filter, sort: sort);
-      return result.map<Customer>((e) => mapToData(e.toJson())).toList();
+      return result.map<Branch>((e) => mapToData(e.toJson())).toList();
     }, Failure.handle);
   }
 }
