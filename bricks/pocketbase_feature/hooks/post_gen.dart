@@ -38,7 +38,7 @@ void run(HookContext context) {
   injectLine(
     context: context,
     targetPath: 'lib/src/core/routing/main.routes.dart',
-    marker: "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+    marker: "import 'package:go_router/go_router.dart';",
     newLine:
         "import 'package:$packageName/src/features/$pluralSnake/presentation/pages/_index.dart';",
     successMessage: 'Inserted import part for `$plural`',

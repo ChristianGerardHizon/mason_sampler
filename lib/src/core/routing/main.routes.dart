@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mason_sampler/src/features/branches/presentation/pages/_index.dart';
 import 'package:mason_sampler/src/core/routing/router.dart';
 

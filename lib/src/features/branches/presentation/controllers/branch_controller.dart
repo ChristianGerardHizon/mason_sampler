@@ -1,7 +1,7 @@
-
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+// system imports
 import 'package:mason_sampler/src/features/branches/data/branch_repository.dart';
 import 'package:mason_sampler/src/features/branches/domain/branch.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'branch_controller.g.dart';
 

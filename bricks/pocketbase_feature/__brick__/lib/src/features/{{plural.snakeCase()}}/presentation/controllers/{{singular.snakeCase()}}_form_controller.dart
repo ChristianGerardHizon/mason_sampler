@@ -1,8 +1,9 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+// system imports
 import 'package:{{packageName.snakeCase()}}/src/core/models/fields/pb_field.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part '{{singular.snakeCase()}}_form_controller.g.dart';
 
