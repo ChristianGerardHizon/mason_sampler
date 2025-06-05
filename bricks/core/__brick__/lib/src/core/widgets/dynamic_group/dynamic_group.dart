@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/_index.dart'
-    show DynamicGroupItem;
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_group/dynamic_group_item.dart';
 
 class DynamicGroup extends StatelessWidget {
   const DynamicGroup({

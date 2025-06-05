@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mason_sampler/src/core/widgets/_index.dart'
-    show DynamicGroupItem;
+import 'package:mason_sampler/src/core/widgets/dynamic_group/dynamic_group_item.dart';
 
 class DynamicGroup extends StatelessWidget {
   const DynamicGroup({

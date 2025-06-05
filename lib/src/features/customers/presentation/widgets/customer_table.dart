@@ -12,34 +12,34 @@ import 'package:mason_sampler/src/core/widgets/failure_message.dart';
 import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
 import 'package:mason_sampler/src/core/widgets/modals/confirm_modal.dart';
 import 'package:mason_sampler/src/core/widgets/refresh_button.dart';
-import 'package:mason_sampler/src/features/branches/data/branch_repository.dart';
-import 'package:mason_sampler/src/features/branches/domain/branch.dart';
-import 'package:mason_sampler/src/features/branches/presentation/controllers/branch_table_controller.dart';
-import 'package:mason_sampler/src/features/branches/presentation/widgets/branch_card.dart';
+import 'package:mason_sampler/src/features/customers/data/customer_repository.dart';
+import 'package:mason_sampler/src/features/customers/domain/customer.dart';
+import 'package:mason_sampler/src/features/customers/presentation/controllers/customer_table_controller.dart';
+import 'package:mason_sampler/src/features/customers/presentation/widgets/customer_card.dart';
 
-class BranchTable extends HookConsumerWidget {
-  const BranchTable({super.key});
+class CustomerTable extends HookConsumerWidget {
+  const CustomerTable({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchCtrl = useTextEditingController();
-    final tableKey = 'branch';
+    final tableKey = 'customer';
     final provider = tableControllerProvider(tableKey);
     final notifier = ref.read(provider.notifier);
-    final listProvider = branchTableControllerProvider(tableKey);
+    final listProvider = customerTableControllerProvider(tableKey);
     final listState = ref.watch(listProvider);
 
     ///
     /// onTap
     ///
-    onTap(Branch branch) {
-      BranchPageRoute(branch.id).push(context);
+    onTap(Customer customer) {
+      CustomerPageRoute(customer.id).push(context);
     }
 
     ///
     /// onRefresh
     ///
     onRefresh() {
-      ref.invalidate(branchTableControllerProvider);
+      ref.invalidate(customerTableControllerProvider);
       ref.invalidate(provider);
       notifier.clearSelection();
     }
@@ -47,17 +47,17 @@ class BranchTable extends HookConsumerWidget {
     ///
     /// onDelete
     ///
-    onDelete(List<Branch> items) async {
+    onDelete(List<Customer> items) async {
       final confirm = await ConfirmModal.show(context);
       if (confirm != true) return;
-      final repo = ref.read(branchRepositoryProvider);
+      final repo = ref.read(customerRepositoryProvider);
       final ids = items.map((e) => e.id).toList();
       // isLoading.value = true;
       final result = await repo.softDeleteMulti(ids).run();
       // if (context.mounted) isLoading.value = false;
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         notifier.clearSelection();
-        ref.invalidate(branchTableControllerProvider);
+        ref.invalidate(customerTableControllerProvider);
         AppSnackBar.root(message: 'Successfully Deleted');
       });
     }
@@ -66,15 +66,15 @@ class BranchTable extends HookConsumerWidget {
     /// OnCreate
     ///
     onCreate() {
-      BranchFormPageRoute().push(context);
+      CustomerFormPageRoute().push(context);
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Branches'),
+        title: Text('Customers'),
         actions: [RefreshButton(onPressed: onRefresh)],
       ),
-      body: SliverDynamicTableView<Branch>(
+      body: SliverDynamicTableView<Customer>(
         tableKey: tableKey,
         error: FailureMessage.asyncValue(listState),
         isLoading: listState.isLoading,
@@ -108,14 +108,14 @@ class BranchTable extends HookConsumerWidget {
         ///
         /// Builder for mobile
         ///
-        mobileBuilder: (context, index, branch, selected) {
-          return BranchCard(
-            branch: branch,
+        mobileBuilder: (context, index, customer, selected) {
+          return CustomerCard(
+            customer: customer,
             onTap: () {
               if (selected)
                 notifier.toggleRow(index);
               else
-                onTap(branch);
+                onTap(customer);
             },
             selected: selected,
             onLongPress: () {

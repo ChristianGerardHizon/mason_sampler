@@ -1,10 +1,17 @@
+/// package imports
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+/// system imports
 import 'package:{{packageName.snakeCase()}}/src/core/controllers/table_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_table_column.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/_index.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_table/sliver_dynamic_table_view.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/failure_message.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/confirm_modal.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/refresh_button.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_table_controller.dart';
@@ -25,7 +32,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
     /// onTap
     ///
     onTap({{singular.pascalCase()}} {{singular.snakeCase()}}) {
-      {{singular.pascalCase()}}PageRoute(branch.id).push(context);
+      {{singular.pascalCase()}}PageRoute({{singular.snakeCase()}}.id).push(context);
     }
 
     ///

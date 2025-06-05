@@ -7,6 +7,7 @@ import 'package:mason_sampler/src/core/widgets/dynamic_table/dynamic_table_base.
 import 'package:mason_sampler/src/core/models/dynamic_table_column.dart';
 import 'package:mason_sampler/src/core/controllers/table_controller.dart';
 import 'package:mason_sampler/src/core/models/table_sort.dart';
+import 'package:mason_sampler/src/core/widgets/dynamic_table/sliver_dynamic_table_base.dart';
 import 'package:mason_sampler/src/core/widgets/page_selector.dart';
 
 typedef MobileBuilderFunc<T> =

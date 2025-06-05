@@ -12,34 +12,34 @@ import 'package:mason_sampler/src/core/widgets/failure_message.dart';
 import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
 import 'package:mason_sampler/src/core/widgets/modals/confirm_modal.dart';
 import 'package:mason_sampler/src/core/widgets/refresh_button.dart';
-import 'package:mason_sampler/src/features/branches/data/branch_repository.dart';
-import 'package:mason_sampler/src/features/branches/domain/branch.dart';
-import 'package:mason_sampler/src/features/branches/presentation/controllers/branch_table_controller.dart';
-import 'package:mason_sampler/src/features/branches/presentation/widgets/branch_card.dart';
+import 'package:mason_sampler/src/features/patients/data/patient_repository.dart';
+import 'package:mason_sampler/src/features/patients/domain/patient.dart';
+import 'package:mason_sampler/src/features/patients/presentation/controllers/patient_table_controller.dart';
+import 'package:mason_sampler/src/features/patients/presentation/widgets/patient_card.dart';
 
-class BranchTable extends HookConsumerWidget {
-  const BranchTable({super.key});
+class PatientTable extends HookConsumerWidget {
+  const PatientTable({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchCtrl = useTextEditingController();
-    final tableKey = 'branch';
+    final tableKey = 'patient';
     final provider = tableControllerProvider(tableKey);
     final notifier = ref.read(provider.notifier);
-    final listProvider = branchTableControllerProvider(tableKey);
+    final listProvider = patientTableControllerProvider(tableKey);
     final listState = ref.watch(listProvider);
 
     ///
     /// onTap
     ///
-    onTap(Branch branch) {
-      BranchPageRoute(branch.id).push(context);
+    onTap(Patient patient) {
+      PatientPageRoute(patient.id).push(context);
     }
 
     ///
     /// onRefresh
     ///
     onRefresh() {
-      ref.invalidate(branchTableControllerProvider);
+      ref.invalidate(patientTableControllerProvider);
       ref.invalidate(provider);
       notifier.clearSelection();
     }
@@ -47,17 +47,17 @@ class BranchTable extends HookConsumerWidget {
     ///
     /// onDelete
     ///
-    onDelete(List<Branch> items) async {
+    onDelete(List<Patient> items) async {
       final confirm = await ConfirmModal.show(context);
       if (confirm != true) return;
-      final repo = ref.read(branchRepositoryProvider);
+      final repo = ref.read(patientRepositoryProvider);
       final ids = items.map((e) => e.id).toList();
       // isLoading.value = true;
       final result = await repo.softDeleteMulti(ids).run();
       // if (context.mounted) isLoading.value = false;
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         notifier.clearSelection();
-        ref.invalidate(branchTableControllerProvider);
+        ref.invalidate(patientTableControllerProvider);
         AppSnackBar.root(message: 'Successfully Deleted');
       });
     }
@@ -66,15 +66,15 @@ class BranchTable extends HookConsumerWidget {
     /// OnCreate
     ///
     onCreate() {
-      BranchFormPageRoute().push(context);
+      PatientFormPageRoute().push(context);
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Branches'),
+        title: Text('Patients'),
         actions: [RefreshButton(onPressed: onRefresh)],
       ),
-      body: SliverDynamicTableView<Branch>(
+      body: SliverDynamicTableView<Patient>(
         tableKey: tableKey,
         error: FailureMessage.asyncValue(listState),
         isLoading: listState.isLoading,
@@ -108,14 +108,14 @@ class BranchTable extends HookConsumerWidget {
         ///
         /// Builder for mobile
         ///
-        mobileBuilder: (context, index, branch, selected) {
-          return BranchCard(
-            branch: branch,
+        mobileBuilder: (context, index, patient, selected) {
+          return PatientCard(
+            patient: patient,
             onTap: () {
               if (selected)
                 notifier.toggleRow(index);
               else
-                onTap(branch);
+                onTap(patient);
             },
             selected: selected,
             onLongPress: () {

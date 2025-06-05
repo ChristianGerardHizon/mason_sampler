@@ -1,5 +1,5 @@
 {
     "packageName":"mason_sampler",
-    "singular":"branch",
-    "plural":"branches"
+    "singular":"patient",
+    "plural":"patients"
 }

@@ -1,5 +1,7 @@
 
 class PocketBaseCollections {
+  static const patients = 'Patients';
+  static const customers = 'Customers';
   static const branches = 'Branches';
   
   // add collection names here sample
@@ -9,4 +11,3 @@ class PocketBaseCollections {
   // static const _index = '_index';
   
 }
-

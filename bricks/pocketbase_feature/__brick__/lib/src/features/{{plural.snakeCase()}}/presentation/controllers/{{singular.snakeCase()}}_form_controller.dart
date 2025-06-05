@@ -20,10 +20,10 @@ class {{singular.pascalCase()}}FormController extends _${{singular.pascalCase()}
     final {{singular.camelCase()}}Repo = ref.read({{singular.camelCase()}}RepositoryProvider);
     final result = await TaskResult.Do(($) async {
       if (id == null) {
-        return {{singular.pascalCase()}}FormState(branch: null);
+        return {{singular.pascalCase()}}FormState({{singular.camelCase()}}: null);
       }
       final {{singular.camelCase()}} = await $({{singular.camelCase()}}Repo.get(id));
-      return {{singular.pascalCase()}}FormState(branch: {{singular.camelCase()}});
+      return {{singular.pascalCase()}}FormState({{singular.camelCase()}}: {{singular.camelCase()}});
     }).run();
 
     return result.fold(Future.error, (x) => Future.value(x));

@@ -5,22 +5,22 @@ import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
-import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart'
-    show {{singular.pascalCase()}}FormPageRoute, ${{singular.pascalCase()}}FormPageRouteExtension;
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_group/dynamic_group.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_group/dynamic_group_item.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/failure_message.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/confirm_modal.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/stack_loader.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
+import 'package:mason_sampler/src/core/models/failure.dart';
+import 'package:mason_sampler/src/core/models/type_defs.dart';
+import 'package:mason_sampler/src/core/routing/router.dart'
+    show PatientFormPageRoute, $PatientFormPageRouteExtension;
+import 'package:mason_sampler/src/core/widgets/dynamic_group/dynamic_group.dart';
+import 'package:mason_sampler/src/core/widgets/dynamic_group/dynamic_group_item.dart';
+import 'package:mason_sampler/src/core/widgets/failure_message.dart';
+import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
+import 'package:mason_sampler/src/core/widgets/modals/confirm_modal.dart';
+import 'package:mason_sampler/src/core/widgets/stack_loader.dart';
+import 'package:mason_sampler/src/features/patients/data/patient_repository.dart';
+import 'package:mason_sampler/src/features/patients/domain/patient.dart';
+import 'package:mason_sampler/src/features/patients/presentation/controllers/patient_controller.dart';
 
-class {{singular.pascalCase()}}Details extends HookConsumerWidget {
-  const {{singular.pascalCase()}}Details(this.id, {super.key});
+class PatientDetails extends HookConsumerWidget {
+  const PatientDetails(this.id, {super.key});
 
   final String id;
 
@@ -34,42 +34,42 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
     ///
     /// repo
     ///
-    final repo = ref.read({{singular.camelCase()}}RepositoryProvider);
+    final repo = ref.read(patientRepositoryProvider);
 
     ///
     /// State
     ///
-    final state = ref.watch({{singular.camelCase()}}ControllerProvider(id));
+    final state = ref.watch(patientControllerProvider(id));
 
     ///
     /// refresh
     ///
     refresh(String id) {
-      ref.invalidate({{singular.camelCase()}}ControllerProvider(id));
+      ref.invalidate(patientControllerProvider(id));
     }
 
     ///
     /// on tap
     ///
-    tap({{singular.pascalCase()}} {{singular.snakeCase()}}) {
-      {{singular.pascalCase()}}FormPageRoute(id: {{singular.snakeCase()}}.id).push(context);
+    tap(Patient patient) {
+      PatientFormPageRoute(id: patient.id).push(context);
     }
 
     ///
     /// onDelete
     ///
-    onDelete({{singular.pascalCase()}} {{singular.snakeCase()}}) async {
+    onDelete(Patient patient) async {
       final fullTask =
           await
           // 1. Call Confirm Modal
           ConfirmModal.taskResult(context)
               // 2. Delete Network Call
-              .flatMap((_) => repo.softDeleteMulti([{{singular.snakeCase()}}.id]))
+              .flatMap((_) => repo.softDeleteMulti([patient.id]))
               // 3. Side effects
               .flatMap(
                 (_) => _handleSuccessfulDeleteTaskSidEffects(
                   context: context,
-                  {{singular.snakeCase()}}Id: {{singular.snakeCase()}}.id,
+                  patientId: patient.id,
                   refresh: refresh,
                 ),
               );
@@ -85,7 +85,7 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
     return state.when(
       error: (error, stack) => FailureMessage(error, stack),
       loading: () => Center(child: CircularProgressIndicator()),
-      data: ({{singular.pascalCase()}} {{singular.snakeCase()}}) {
+      data: (Patient patient) {
         return StackLoader(
           isLoading: isLoading.value,
           child: CustomScrollView(
@@ -106,9 +106,9 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
                       right: 8,
                       bottom: 12,
                     ),
-                    header: '{{singular.pascalCase()}} Information',
+                    header: 'Patient Information',
                     items: [
-                      DynamicGroupItem.text(title: 'Id', value: {{singular.snakeCase()}}.id),
+                      DynamicGroupItem.text(title: 'Id', value: patient.id),
                     ],
                   ),
 
@@ -124,14 +124,14 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
                     header: 'Actions',
                     items: [
                       DynamicGroupItem.action(
-                        onTap: () => tap({{singular.snakeCase()}}),
+                        onTap: () => tap(patient),
                         leading: Icon(MIcons.fileEditOutline),
                         title: 'Edit Details',
                         trailing: Icon(MIcons.chevronRight),
                       ),
                       DynamicGroupItem.action(
                         titleColor: Theme.of(context).colorScheme.error,
-                        onTap: () => onDelete({{singular.snakeCase()}}),
+                        onTap: () => onDelete(patient),
                         leading: Icon(
                           MIcons.trashCan,
                           color: Theme.of(context).colorScheme.error,
@@ -162,14 +162,14 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
 ///
 TaskResult<void> _handleSuccessfulDeleteTaskSidEffects({
   required BuildContext context,
-  required String {{singular.snakeCase()}}Id,
+  required String patientId,
   required void Function(String id) refresh,
 }) {
   return Task<void>(() async {
     if (!context.mounted) return;
     AppSnackBar.root(message: 'Successfully Deleted');
     if (context.canPop()) context.pop();
-    refresh({{singular.snakeCase()}}Id);
+    refresh(patientId);
     return null;
   }).toTaskEither<Failure>();
 }

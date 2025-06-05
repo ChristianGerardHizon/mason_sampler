@@ -4,10 +4,7 @@ import 'package:material_table_view/material_table_view.dart';
 import 'package:responsive_builder/responsive_builder.dart'
     show getValueForScreenType;
 //
-import 'package:mason_sampler/src/core/widgets/_index.dart'
-    show DynamicTableBaseColumn;
-export 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_table_base_column.dart'
-    show DynamicTableBaseColumn;
+import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_table_base_column.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/controllers/table_controller.dart';
 
 class DynamicTableBase extends HookConsumerWidget {

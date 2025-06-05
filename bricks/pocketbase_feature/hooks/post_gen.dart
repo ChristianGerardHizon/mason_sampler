@@ -31,10 +31,10 @@ void run(HookContext context) {
     successMessage: 'Inserted route part for `$plural`',
     alreadyExistsMessage: 'Route part for `$plural` already exists',
     missingFileMessage: 'main.routes file not found',
+    // force: false is the default, so you can omit it if you don't want forced insertion.
   );
 
   // add page to main.routes import
-  // Example usage for routes:
   injectLine(
     context: context,
     targetPath: 'lib/src/core/routing/main.routes.dart',
@@ -44,6 +44,8 @@ void run(HookContext context) {
     successMessage: 'Inserted import part for `$plural`',
     alreadyExistsMessage: 'Import part for `$plural` already exists',
     missingFileMessage: 'main.routes file not found',
+    // If you ever want to insert even if the import is already present, pass force: true
+    // force: true,
   );
 
   // Example usage for PocketBase collections:
@@ -56,6 +58,7 @@ void run(HookContext context) {
     successMessage: 'Inserted PocketBase collection `$pluralSnake`',
     alreadyExistsMessage: 'PocketBase collection `$pluralSnake` already exists',
     missingFileMessage: 'PocketBase collections file not found',
+    // force: false (default)
   );
 
   context.logger.info('✅ post_gen: completed all injections.');
@@ -64,10 +67,12 @@ void run(HookContext context) {
 /// A general-purpose function to inject [newLine] into a file at [targetPath].
 ///
 /// - Looks for [marker] (exact match after trimming) in the file’s lines.
-///   • If found and [newLine] isn’t already present, inserts [newLine] immediately
+///   • If found and [newLine] isn’t already present (or [force] is true), inserts [newLine] immediately
 ///     after that marker line.
-///   • If [marker] isn’t found, appends [newLine] at the end (unless already present).
-///   • If [newLine] is already in the file, logs [alreadyExistsMessage] and does nothing.
+///   • If [marker] isn’t found:
+///       – If [newLine] already exists and [force] is false: logs [alreadyExistsMessage].
+///       – Otherwise, appends [newLine] at the end.
+///   • If [newLine] is already in the file and [force] is false, logs [alreadyExistsMessage] and does nothing.
 ///   • If [targetPath] doesn’t exist, logs [missingFileMessage] and does nothing.
 ///
 /// You can customize the logged messages via [successMessage], [alreadyExistsMessage],
@@ -80,6 +85,7 @@ void injectLine({
   required String successMessage,
   required String alreadyExistsMessage,
   required String missingFileMessage,
+  bool force = false, // <-- New optional parameter. When true, always insert.
 }) {
   final file = File(targetPath);
   if (!file.existsSync()) {
@@ -88,13 +94,17 @@ void injectLine({
   }
 
   final lines = file.readAsLinesSync();
-  if (lines.contains(newLine)) {
+
+  // If the file already contains newLine and we're not forcing, bail out.
+  if (lines.contains(newLine) && !force) {
     context.logger.info('ℹ $alreadyExistsMessage.');
     return;
   }
 
+  // Find the marker (trimmed) in the file.
   final idx = lines.indexWhere((l) => l.trim() == marker);
   if (idx != -1) {
+    // Insert newLine right after the marker, even if it exists elsewhere when force == true.
     final updated = [
       ...lines.sublist(0, idx + 1),
       newLine,
@@ -103,6 +113,13 @@ void injectLine({
     file.writeAsStringSync(updated.join('\n'));
     context.logger.info('✓ $successMessage after marker `$marker`.');
   } else {
+    // Marker not found.
+    if (lines.contains(newLine) && !force) {
+      // Already handled above, but double-check in case marker wasn’t found.
+      context.logger.info('ℹ $alreadyExistsMessage.');
+      return;
+    }
+    // Append newLine at the end.
     final updated = [...lines, newLine];
     file.writeAsStringSync(updated.join('\n'));
     context.logger

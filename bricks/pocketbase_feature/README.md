@@ -37,3 +37,8 @@ mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-confl
 
 <!-- With Core -->
 mason make core -c tools/core_config.json  --on-conflict=overwrite ; dart pub get ; dart run build_runner build --delete-conflicting-outputs; dart run slang; mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
+
+
+
+
+
