@@ -85,7 +85,7 @@ class BranchDetails extends HookConsumerWidget {
     return state.when(
       error: (error, stack) => FailureMessage(error, stack),
       loading: () => Center(child: CircularProgressIndicator()),
-      data: (branch) {
+      data: (Branch branch) {
         return StackLoader(
           isLoading: isLoading.value,
           child: CustomScrollView(

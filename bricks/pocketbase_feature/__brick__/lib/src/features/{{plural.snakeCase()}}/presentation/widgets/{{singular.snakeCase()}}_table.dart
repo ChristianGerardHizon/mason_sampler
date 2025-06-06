@@ -69,12 +69,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
       {{singular.pascalCase()}}FormPageRoute().push(context);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('{{plural.pascalCase()}}'),
-        actions: [RefreshButton(onPressed: onRefresh)],
-      ),
-      body: SliverDynamicTableView<{{singular.pascalCase()}}>(
+    return SliverDynamicTableView<{{singular.pascalCase()}}>(
         tableKey: tableKey,
         error: FailureMessage.asyncValue(listState),
         isLoading: listState.isLoading,
@@ -123,7 +118,6 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
             },
           );
         },
-      ),
-    );
+      );
   }
 }

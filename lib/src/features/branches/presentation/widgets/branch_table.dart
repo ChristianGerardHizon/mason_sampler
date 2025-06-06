@@ -69,12 +69,7 @@ class BranchTable extends HookConsumerWidget {
       BranchFormPageRoute().push(context);
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Branches'),
-        actions: [RefreshButton(onPressed: onRefresh)],
-      ),
-      body: SliverDynamicTableView<Branch>(
+    return SliverDynamicTableView<Branch>(
         tableKey: tableKey,
         error: FailureMessage.asyncValue(listState),
         isLoading: listState.isLoading,
@@ -123,7 +118,6 @@ class BranchTable extends HookConsumerWidget {
             },
           );
         },
-      ),
-    );
+      );
   }
 }

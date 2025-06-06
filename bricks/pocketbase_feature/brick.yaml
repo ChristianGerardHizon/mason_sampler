@@ -29,7 +29,7 @@ vars:
   packageName:
     type: string
     description: Your packageName
-    default: Dash
+    default: mason_sampler
     prompt: What is your name?
   singular:
     type: string
