@@ -4,6 +4,8 @@
 bricks:
   pocketbase_feature:
     path: ./bricks/pocketbase_feature
+  pocketbase_auth_feature:
+    path: ./bricks/pocketbase_auth_feature
   core:
     path: ./bricks/core
 
