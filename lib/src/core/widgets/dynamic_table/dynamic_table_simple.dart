@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_table_base_column.dart';
+import 'package:mason_sampler/src/core/models/dynamic_table_base_column.dart';
 //
-import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_table/dynamic_table_base.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_table_column.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/controllers/table_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/table_sort.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/page_selector.dart';
+import 'package:mason_sampler/src/core/models/type_defs.dart';
+import 'package:mason_sampler/src/core/widgets/dynamic_table/dynamic_table_base.dart';
+import 'package:mason_sampler/src/core/models/dynamic_table_column.dart';
+import 'package:mason_sampler/src/core/controllers/table_controller.dart';
+import 'package:mason_sampler/src/core/models/table_sort.dart';
+import 'package:mason_sampler/src/core/widgets/page_selector.dart';
 
 typedef MobileBuilderFunc<T> =
     Widget Function(BuildContext context, int index, T data, bool selected);

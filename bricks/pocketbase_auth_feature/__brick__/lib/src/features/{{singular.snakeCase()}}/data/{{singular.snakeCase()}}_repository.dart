@@ -1,27 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sannjosevet/src/core/models/failure.dart';
-import 'package:sannjosevet/src/core/packages/flutter_secure_storage.dart';
-import 'package:sannjosevet/src/core/packages/pocketbase.dart';
-import 'package:sannjosevet/src/core/packages/pocketbase_collections.dart';
-import 'package:sannjosevet/src/core/strings/fields.dart';
-import 'package:sannjosevet/src/core/strings/pb_expand.dart';
-import 'package:sannjosevet/src/core/models/type_defs.dart';
-import 'package:sannjosevet/src/features/admins/domain/admin.dart';
-import 'package:sannjosevet/src/features/authentication/domain/auth_admin.dart';
-import 'package:sannjosevet/src/features/authentication/domain/auth_data.dart';
-import 'package:sannjosevet/src/features/authentication/domain/auth_user.dart';
-import 'package:sannjosevet/src/features/users/domain/user.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_repository.g.dart';
+part '{{singular.snakeCase()}}_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-AuthRepository authRepository(Ref ref) {
+{{singular.pascalCase()}}Repository authRepository(Ref ref) {
   return AuthRepositoryImpl(
     storage: ref.read(flutterSecureStorageProvider),
     authKey: 'AUTH_KEY',
@@ -29,7 +16,7 @@ AuthRepository authRepository(Ref ref) {
   );
 }
 
-abstract class AuthRepository {
+abstract class {{singular.pascalCase()}}Repository {
   TaskResult<AuthAdmin> loginAsAdmin(Map<String, dynamic> payload);
   TaskResult<AuthUser> loginAsUser(Map<String, dynamic> payload);
   TaskResult<void> logout();
@@ -51,45 +38,39 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthStore get authStore => pb.authStore;
 
   TaskResult<T> _saveToStorage<T>(RecordAuth recordAuth) {
-    return TaskResult.tryCatch(
-      () async {
-        final token = recordAuth.token;
-        final record = recordAuth.record;
+    return TaskResult.tryCatch(() async {
+      final token = recordAuth.token;
+      final record = recordAuth.record;
 
-        AuthData? data;
-        if (record.collectionName == PocketBaseCollections.users) {
-          data = AuthUser(
-            collectionName: record.collectionName,
-            collectionId: record.collectionId,
-            id: record.id,
-            token: token,
-            record: User.fromMap({...record.data, 'domain': pb.baseURL}),
-          );
-        }
-
-        if (record.collectionName == PocketBaseCollections.admins) {
-          data = AuthAdmin(
-            collectionName: record.collectionName,
-            collectionId: record.collectionId,
-            id: record.id,
-            token: token,
-            record: Admin.fromMap({...record.data, 'domain': pb.baseURL}),
-          );
-        }
-        if (data == null) throw 'unknown user type';
-
-        ///
-        /// store
-        ///
-        await storage.write(
-          key: authKey,
-          value: data.toJson(),
+      AuthData? data;
+      if (record.collectionName == PocketBaseCollections.users) {
+        data = AuthUser(
+          collectionName: record.collectionName,
+          collectionId: record.collectionId,
+          id: record.id,
+          token: token,
+          record: User.fromMap({...record.data, 'domain': pb.baseURL}),
         );
-        authStore.save(token, record);
-        return data as T;
-      },
-      Failure.handle,
-    );
+      }
+
+      if (record.collectionName == PocketBaseCollections.admins) {
+        data = AuthAdmin(
+          collectionName: record.collectionName,
+          collectionId: record.collectionId,
+          id: record.id,
+          token: token,
+          record: Admin.fromMap({...record.data, 'domain': pb.baseURL}),
+        );
+      }
+      if (data == null) throw 'unknown user type';
+
+      ///
+      /// store
+      ///
+      await storage.write(key: authKey, value: data.toJson());
+      authStore.save(token, record);
+      return data as T;
+    }, Failure.handle);
   }
 
   TaskResult<AuthAdmin> loginAsAdmin(Map<String, dynamic> payload) {
@@ -99,9 +80,7 @@ class AuthRepositoryImpl implements AuthRepository {
         final password = payload[UserField.password];
 
         return await pb
-            .collection(
-              PocketBaseCollections.admins,
-            )
+            .collection(PocketBaseCollections.admins)
             .authWithPassword(
               email,
               password,
@@ -135,41 +114,37 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   TaskResult<void> logout() {
-    return TaskResult.tryCatch(
-      () async {
-        authStore.clear();
-        await storage.delete(key: authKey);
-      },
-      Failure.handle,
-    );
+    return TaskResult.tryCatch(() async {
+      authStore.clear();
+      await storage.delete(key: authKey);
+    }, Failure.handle);
   }
 
   TaskResult<AuthData> refresh() {
-    return TaskResult.tryCatch(
-      () async {
-        final collection = authStore.record?.collectionName;
+    return TaskResult.tryCatch(() async {
+      final collection = authStore.record?.collectionName;
 
-        if (collection == null) {
-          throw DataFailure('collection is null', StackTrace.current);
-        }
+      if (collection == null) {
+        throw DataFailure('collection is null', StackTrace.current);
+      }
 
-        if (collection == PocketBaseCollections.admins) {
-          return await pb.collection(collection).authRefresh(
-                expand: PBExpand.admin.toString(),
-              );
-        }
+      if (collection == PocketBaseCollections.admins) {
+        return await pb
+            .collection(collection)
+            .authRefresh(expand: PBExpand.admin.toString());
+      }
 
-        if (collection == PocketBaseCollections.users) {
-          return await pb
-              .collection(collection)
-              .authRefresh(expand: PBExpand.user.toString());
-        }
+      if (collection == PocketBaseCollections.users) {
+        return await pb
+            .collection(collection)
+            .authRefresh(expand: PBExpand.user.toString());
+      }
 
-        throw DataFailure(
-            'collection is unknown ($collection)', StackTrace.current);
-      },
-      Failure.handle,
-    ).flatMap(_saveToStorage);
+      throw DataFailure(
+        'collection is unknown ($collection)',
+        StackTrace.current,
+      );
+    }, Failure.handle).flatMap(_saveToStorage);
   }
 
   @override
@@ -192,11 +167,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
         final authModel = oldCollection == PocketBaseCollections.admins
             ? await pb
-                .collection(oldCollection)
-                .authRefresh(expand: PBExpand.admin.toString())
+                  .collection(oldCollection)
+                  .authRefresh(expand: PBExpand.admin.toString())
             : await pb
-                .collection(oldCollection)
-                .authRefresh(expand: PBExpand.user.toString());
+                  .collection(oldCollection)
+                  .authRefresh(expand: PBExpand.user.toString());
 
         authStore.save(authModel.token, authModel.record);
 
