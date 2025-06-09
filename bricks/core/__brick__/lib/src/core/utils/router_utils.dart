@@ -16,7 +16,7 @@ class RouterUtils {
     BuildContext context,
     GoRouterState state,
     Ref<Object?> ref,
-  ) {
+  ) async {
     // If the current path is in ignored routes, do not redirect
     final isIgnored = ignoredRoutes.any(
       (route) => state.fullPath?.contains(route) ?? false,

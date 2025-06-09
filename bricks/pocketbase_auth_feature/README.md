@@ -27,18 +27,13 @@ A few resources to get you started if this is your first brick template:
 [7]: https://youtu.be/LXhgiF5HiQg
 
 <!-- Run this  -->
-mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite
+mason make pocketbase_auth_feature -c tools/pocketbase_auth_feature_config.json --on-conflict=overwrite
 dart pub get
 dart run build_runner build --delete-conflicting-outputs
 
 
 <!-- nushell -->
-mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
+mason make pocketbase_auth_feature -c tools/pocketbase_auth_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
 
 <!-- With Core -->
-mason make core -c tools/core_config.json  --on-conflict=overwrite ; dart pub get ; dart run build_runner build --delete-conflicting-outputs; dart run slang; mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
-
-
-
-
-
+mason make core -c tools/core_config.json  --on-conflict=overwrite ; mason make pocketbase_auth_feature -c tools/pocketbase_auth_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs; dart run slang; 

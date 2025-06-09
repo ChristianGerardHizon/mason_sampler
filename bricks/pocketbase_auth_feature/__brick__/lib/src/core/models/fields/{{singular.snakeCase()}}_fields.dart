@@ -6,5 +6,8 @@ class {{singular.pascalCase()}}Fields {
   static const String updated = PbField.updated;
   static const String isDeleted = PbField.isDeleted;
 
-  // static const String name = 'name';
+  static const String identity = 'identity';
+  static const String password = 'password';
+
+  static const String type = 'type';
 }

@@ -5,10 +5,16 @@ import 'package:mason/mason.dart';
 
 void run(HookContext context) {
   final rawPlural = context.vars['plural'];
+  final rawSingular = context.vars['singular'];
   final rawPackageName = context.vars['packageName'];
   if (rawPlural == null) {
     context.logger
         .warn('⚠ `plural` was not provided; skipping all injections.');
+    return;
+  }
+  if (rawSingular == null) {
+    context.logger
+        .warn('⚠ `singular` was not provided; skipping all injections.');
     return;
   }
   if (rawPackageName == null) {
@@ -18,8 +24,12 @@ void run(HookContext context) {
   }
   final plural = rawPlural.toString();
   final packageName = rawPackageName.toString();
+  final singular = rawSingular.toString();
   final pluralSnake = _toSnakeCase(plural);
   final pluralPascal = _toPascalCase(plural);
+  final singularSnake = _toSnakeCase(singular);
+  final singularPascal = _toPascalCase(singular);
+  final pluralCamel = _toCamelCase(plural);
   final packageNameSnake = _toSnakeCase(packageName.toString());
 
   // Example usage for routes:
@@ -54,11 +64,69 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/models/pocketbase_collections.dart',
     // Look for the opening of the class; we’ll insert right after this marker
     marker: 'class PocketBaseCollections {',
-    newLine: '  static const $pluralSnake = \'$pluralPascal\';',
+    newLine: '  static const $pluralSnake = \'$pluralCamel\';',
     successMessage: 'Inserted PocketBase collection `$pluralSnake`',
     alreadyExistsMessage: 'PocketBase collection `$pluralSnake` already exists',
     missingFileMessage: 'PocketBase collections file not found',
     // force: false (default)
+  );
+  // add auth router utils imports
+  injectLine(
+    context: context,
+    targetPath: 'lib/src/core/utils/router_utils.dart',
+    marker: "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+    newLine:
+        "import 'package:$packageNameSnake/src/core/utils/auth_router_utils.dart';",
+    successMessage: 'Inserted auth router utils imports',
+    alreadyExistsMessage: 'Auth router utils imports already exists',
+    missingFileMessage: 'router utils file not found',
+  );
+
+  // add auth router utils
+  injectLine(
+    context: context,
+    targetPath: 'lib/src/core/utils/router_utils.dart',
+    marker: 'if (isIgnored) return null;',
+    newLine: '''
+    final authResult = await AuthRouterUtils.redirect(context, state, ref);
+    if (authResult != null) {
+      return authResult;
+    }
+''',
+    successMessage: 'Inserted auth router utils',
+    alreadyExistsMessage: 'Auth router utils already exists',
+    missingFileMessage: 'Auth router utils file not found',
+  );
+
+  // auth controller imports
+  injectLine(
+    context: context,
+    targetPath: 'lib/src/application.dart',
+    marker: "import 'package:flutter/material.dart';",
+    newLine: '''
+import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/controllers/auth_controller.dart';
+import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/pages/_index.dart';''',
+    successMessage: 'Inserted auth controller import',
+    alreadyExistsMessage: 'Auth controller import already exists',
+    missingFileMessage: 'Application not found',
+  );
+
+  // add auth router utils
+  injectLine(
+    context: context,
+    targetPath: 'lib/src/application.dart',
+    marker: 'final color = Color.fromARGB(0, 40, 122, 111);',
+    newLine: '''
+    /// auth controller
+    final state = ref.watch(${singularSnake}ControllerProvider);
+
+    if (state.isLoading) {
+      return const ${singularPascal}SplashPage();
+    }
+''',
+    successMessage: 'Inserted auth controller',
+    alreadyExistsMessage: 'Auth controller already exists',
+    missingFileMessage: 'Application not found',
   );
 
   context.logger.info('✅ post_gen: completed all injections.');
@@ -161,4 +229,21 @@ String _toPascalCase(String input) {
     return word[0].toUpperCase() + word.substring(1).toLowerCase();
   });
   return capitalized.join();
+}
+
+/// Convert To CamelCase
+String _toCamelCase(String input) {
+  final words = input.trim().split(RegExp(r'[\s_]+'));
+  if (words.isEmpty) return '';
+
+  // first word all lowercase
+  final firstWord = words.first.toLowerCase();
+
+  // capitalize the first letter of each subsequent word
+  final capitalizedWords = words.skip(1).map((word) {
+    if (word.isEmpty) return '';
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
+  }).join();
+
+  return firstWord + capitalizedWords;
 }

@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/assets/i18n/strings.g.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
@@ -15,50 +13,22 @@ class Application extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final color = Color.fromARGB(0, 40, 122, 111);
 
-    return ThemeProvider(
-      defaultThemeId: 'light',
-      saveThemesOnChange: true,
-      loadThemeOnInit: true,
-      themes: [
-        ///
-        /// Light Theme
-        ///
-        AppTheme(
-          id: 'light',
-          description: 'Light Theme',
-          data: ThemeData(brightness: Brightness.light, colorSchemeSeed: color),
-        ),
-
-        ///
-        /// Dark Theme
-        ///
-        AppTheme(
-          id: 'dark',
-          description: 'Dark Theme',
-          data: ThemeData(brightness: Brightness.dark, colorSchemeSeed: color),
-        ),
-      ],
-      child: ThemeConsumer(
-        child: Builder(
-          builder: (context) {
-            final theme = ThemeProvider.themeOf(context).data;
-            return ResponsiveApp(
-              builder: (context) {
-                return MaterialApp.router(
-                  locale: TranslationProvider.of(context).flutterLocale,
-                  supportedLocales: AppLocaleUtils.supportedLocales,
-                  localizationsDelegates: [
-                    ...GlobalMaterialLocalizations.delegates,
-                  ],
-                  debugShowCheckedModeBanner: false,
-                  title: context.t.common.appName,
-                  theme: theme,
-                  routerConfig: ref.watch(routerProvider),
-                );
-              },
-            );
-          },
-        ),
+    return ThemeConsumer(
+      child: ResponsiveApp(
+        builder: (context) {
+          return MaterialApp.router(
+            locale: TranslationProvider.of(context).flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates: [...GlobalMaterialLocalizations.delegates],
+            debugShowCheckedModeBanner: false,
+            title: context.t.common.appName,
+            theme: ThemeProvider.themeOf(context).data,
+            routerConfig: ref.watch(routerProvider),
+            builder: (context, child) {
+              return child ?? SizedBox();
+            },
+          );
+        },
       ),
     );
   }

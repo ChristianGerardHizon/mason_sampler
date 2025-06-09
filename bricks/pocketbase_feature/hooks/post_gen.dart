@@ -20,6 +20,7 @@ void run(HookContext context) {
   final packageName = rawPackageName.toString();
   final pluralSnake = _toSnakeCase(plural);
   final pluralPascal = _toPascalCase(plural);
+  final pluralCamel = _toCamelCase(plural);
   final packageNameSnake = _toSnakeCase(packageName.toString());
 
   // Example usage for routes:
@@ -54,7 +55,7 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/models/pocketbase_collections.dart',
     // Look for the opening of the class; we’ll insert right after this marker
     marker: 'class PocketBaseCollections {',
-    newLine: '  static const $pluralSnake = \'$pluralPascal\';',
+    newLine: '  static const $pluralSnake = \'$pluralCamel\';',
     successMessage: 'Inserted PocketBase collection `$pluralSnake`',
     alreadyExistsMessage: 'PocketBase collection `$pluralSnake` already exists',
     missingFileMessage: 'PocketBase collections file not found',
@@ -161,4 +162,21 @@ String _toPascalCase(String input) {
     return word[0].toUpperCase() + word.substring(1).toLowerCase();
   });
   return capitalized.join();
+}
+
+/// Convert To CamelCase
+String _toCamelCase(String input) {
+  final words = input.trim().split(RegExp(r'[\s_]+'));
+  if (words.isEmpty) return '';
+
+  // first word all lowercase
+  final firstWord = words.first.toLowerCase();
+
+  // capitalize the first letter of each subsequent word
+  final capitalizedWords = words.skip(1).map((word) {
+    if (word.isEmpty) return '';
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
+  }).join();
+
+  return firstWord + capitalizedWords;
 }

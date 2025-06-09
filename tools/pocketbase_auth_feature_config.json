@@ -1,0 +1,9 @@
+{
+    "packageName":"mason_sampler",
+    "singular":"auth",
+    "plural":"auths",
+    "childSingular":"user",
+    "childPlural":"users",
+    "parentSingular":"admin",
+    "parentPlural":"admins"
+}

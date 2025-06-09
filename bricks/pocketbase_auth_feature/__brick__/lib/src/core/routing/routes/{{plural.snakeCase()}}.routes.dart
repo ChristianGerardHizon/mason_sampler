@@ -4,55 +4,53 @@ class {{plural.pascalCase()}}BranchData extends StatefulShellBranchData {
   const {{plural.pascalCase()}}BranchData();
 
   static const routes = <TypeRouteData>[
-    TypedGoRoute<{{plural.pascalCase()}}PageRoute>(path: {{plural.pascalCase()}}PageRoute.path),
-    TypedGoRoute<{{singular.pascalCase()}}FormPageRoute>(path: {{singular.pascalCase()}}FormPageRoute.path),
-    TypedGoRoute<{{singular.pascalCase()}}PageRoute>(path: {{singular.pascalCase()}}PageRoute.path),
+    TypedGoRoute<{{singular.pascalCase()}}LoginPageRoute>(path: {{singular.pascalCase()}}LoginPageRoute.path),
+    TypedGoRoute<{{singular.pascalCase()}}LogoutPageRoute>(path: {{singular.pascalCase()}}LogoutPageRoute.path),
+    TypedGoRoute<{{singular.pascalCase()}}DetailsPageRoute>(path: {{singular.pascalCase()}}DetailsPageRoute.path),
   ];
 }
 
+///
+/// Login
+///
+@TypedGoRoute<{{singular.pascalCase()}}LoginPageRoute>(path: {{singular.pascalCase()}}LoginPageRoute.path)
+class {{singular.pascalCase()}}LoginPageRoute extends GoRouteData {
+  const {{singular.pascalCase()}}LoginPageRoute({this.email});
+  static const path = '/login';
 
-///
-/// List
-///
-@TypedGoRoute<{{plural.pascalCase()}}PageRoute>(path: {{plural.pascalCase()}}PageRoute.path)
-class {{plural.pascalCase()}}PageRoute extends GoRouteData {
-  const {{plural.pascalCase()}}PageRoute();
-  static const path = '/{{plural.lowerCase()}}';
+  final String? email;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const {{plural.pascalCase()}}Page();
+    return {{singular.pascalCase()}}LoginPage(email: email);
   }
 }
 
 ///
-/// Form
+/// Logout
 ///
-@TypedGoRoute<{{singular.pascalCase()}}FormPageRoute>(path: {{singular.pascalCase()}}FormPageRoute.path)
-class {{singular.pascalCase()}}FormPageRoute extends GoRouteData {
-  const {{singular.pascalCase()}}FormPageRoute({this.id});
-  static const path = '/form/{{singular.lowerCase()}}';
-
-  final String? id;
+@TypedGoRoute<{{singular.pascalCase()}}LogoutPageRoute>(path: {{singular.pascalCase()}}LogoutPageRoute.path)
+class {{singular.pascalCase()}}LogoutPageRoute extends GoRouteData {
+  const {{singular.pascalCase()}}LogoutPageRoute();
+  static const path = '/logout';
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return {{singular.pascalCase()}}FormPage(id: id);
+    return {{singular.pascalCase()}}LogoutPage();
   }
 }
+
 
 ///
 /// Details
 /// 
-@TypedGoRoute<{{singular.pascalCase()}}PageRoute>(path: {{singular.pascalCase()}}PageRoute.path)
-class {{singular.pascalCase()}}PageRoute extends GoRouteData {
-  const {{singular.pascalCase()}}PageRoute(this.id);
-  static const path = '/{{singular.lowerCase()}}/:id';
-
-  final String id;
+@TypedGoRoute<{{singular.pascalCase()}}DetailsPageRoute>(path: {{singular.pascalCase()}}DetailsPageRoute.path)
+class {{singular.pascalCase()}}DetailsPageRoute extends GoRouteData {
+  const {{singular.pascalCase()}}DetailsPageRoute();
+  static const path = '/{{singular.camelCase()}}';
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return {{singular.pascalCase()}}Page(id);
+    return {{singular.pascalCase()}}DetailsPage();
   }
 }
