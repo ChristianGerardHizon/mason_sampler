@@ -6,16 +6,16 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// system imports
-import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/refresh_button.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/widgets/{{singular.snakeCase()}}_details.dart';
+import 'package:mason_sampler/src/core/models/failure.dart';
+import 'package:mason_sampler/src/core/models/type_defs.dart';
+import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
+import 'package:mason_sampler/src/core/widgets/refresh_button.dart';
+import 'package:mason_sampler/src/features/customers/presentation/controllers/customer_controller.dart';
+import 'package:mason_sampler/src/features/customers/presentation/widgets/customer_details.dart';
 
 
-class {{singular.pascalCase()}}Page extends HookConsumerWidget {
-  const {{singular.pascalCase()}}Page(this.id, {super.key});
+class CustomerPage extends HookConsumerWidget {
+  const CustomerPage(this.id, {super.key});
 
   final String id;
 
@@ -26,19 +26,19 @@ class {{singular.pascalCase()}}Page extends HookConsumerWidget {
     /// refresh
     ///
     refresh(String id) {
-      ref.invalidate({{singular.camelCase()}}ControllerProvider(id));
+      ref.invalidate(customerControllerProvider(id));
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('{{singular.pascalCase()}} Details'),
+        title: const Text('Customer Details'),
         actions: [
           RefreshButton(
             onPressed: () => refresh(id),
           )
         ],
       ),
-      body: {{singular.pascalCase()}}Details(id),
+      body: CustomerDetails(id),
     );
   }
 }
@@ -49,14 +49,14 @@ class {{singular.pascalCase()}}Page extends HookConsumerWidget {
 ///
 TaskResult<void> _handleSuccessfulDeleteTaskSidEffects({
   required BuildContext context,
-  required String {{singular.snakeCase()}}Id,
+  required String customerId,
   required void Function(String id) refresh,
 }) {
   return Task<void>(() async {
     if (!context.mounted) return;
     AppSnackBar.root(message: 'Successfully Deleted');
     if (context.canPop()) context.pop();
-    refresh({{singular.snakeCase()}}Id);
+    refresh(customerId);
     return null;
   }).toTaskEither<Failure>();
 }

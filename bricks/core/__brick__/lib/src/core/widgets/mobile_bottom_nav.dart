@@ -25,7 +25,7 @@ class MobileBottomNav extends StatelessWidget {
     ///
     /// routes to show in the bottom nav
     ///
-    final routes = <String>[];
+    final routes = <String>[RootRoute.path];
 
     final finalList = list
         .mapWithIndex((item, index) {
@@ -54,8 +54,11 @@ class MobileBottomNav extends StatelessWidget {
     ///
     ///
     ///
-    int bottomNavIndeCalulator(int index, String? path) {
-      return 0;
+    int bottomNavIndeCalulator(
+      List<CustomNavigationBarItem> list,
+      String? path,
+    ) {
+      return list.indexWhere((item) => item.route == path);
     }
 
     ///
@@ -73,7 +76,7 @@ class MobileBottomNav extends StatelessWidget {
           items: finalList,
           landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
           elevation: 0,
-          currentIndex: bottomNavIndeCalulator(index, state.fullPath),
+          currentIndex: bottomNavIndeCalulator(finalList, state.fullPath),
           selectedFontSize: 13,
           unselectedFontSize: 11,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),

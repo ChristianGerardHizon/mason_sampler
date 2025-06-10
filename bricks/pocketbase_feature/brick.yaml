@@ -41,3 +41,9 @@ vars:
     description: Feature name in plural form
     default: Dash
     prompt: Singular plural name?
+  isShellRoute:
+    type: boolean
+    description: Whether the feature should be a shell route
+    default: false
+    prompt: Is shell route?
+    

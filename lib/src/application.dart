@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mason_sampler/src/features/auths/presentation/controllers/auth_controller.dart';
 import 'package:mason_sampler/src/features/auths/presentation/pages/_index.dart';
+import 'package:mason_sampler/src/core/widgets/stack_loader.dart';
+import 'package:mason_sampler/src/features/auths/presentation/controllers/auth_controller.dart';
+import 'package:mason_sampler/src/features/auths/presentation/pages/_index.dart';
+import 'package:mason_sampler/src/core/widgets/stack_loader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mason_sampler/src/core/assets/i18n/strings.g.dart';
 import 'package:mason_sampler/src/core/routing/router.dart';
@@ -13,15 +17,6 @@ class Application extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = Color.fromARGB(0, 40, 122, 111);
-    /// auth controller
-    final state = ref.watch(authControllerProvider);
-
-    if (state.isLoading) {
-      return const AuthSplashPage();
-    }
-
-
     return ThemeConsumer(
       child: ResponsiveApp(
         builder: (context) {
@@ -34,7 +29,27 @@ class Application extends HookConsumerWidget {
             theme: ThemeProvider.themeOf(context).data,
             routerConfig: ref.watch(routerProvider),
             builder: (context, child) {
-              return child ?? SizedBox();
+              /// auth controller
+              final state = ref.watch(authControllerProvider);
+
+              return Stack(
+                children: [
+                  // 1) Always paint the real app (your router) as the bottom layer
+                  if (child != null) Positioned.fill(child: child),
+
+                  // 2) If we’re loading, overlay a semi-opaque barrier + spinner
+                  if (state.isLoading)
+                    Positioned.fill(
+                      child: Container(
+                        // match your scaffold / background color so there's never a flash of black:
+                        color: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor.withOpacity(0.8),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                ],
+              );
             },
           );
         },

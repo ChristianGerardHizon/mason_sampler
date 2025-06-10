@@ -8,15 +8,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 /// system imports
 import 'package:mason_sampler/src/core/models/failure.dart';
 import 'package:mason_sampler/src/core/models/type_defs.dart';
-import 'package:mason_sampler/src/core/routing/router.dart' show BranchFormPageRoute, $BranchFormPageRouteExtension;
-import 'package:mason_sampler/src/core/widgets/failure_message.dart';
 import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
 import 'package:mason_sampler/src/core/widgets/refresh_button.dart';
-import 'package:mason_sampler/src/features/branches/data/branch_repository.dart';
-import 'package:mason_sampler/src/features/branches/domain/branch.dart';
 import 'package:mason_sampler/src/features/branches/presentation/controllers/branch_controller.dart';
-import 'package:mason_sampler/src/core/widgets/modals/confirm_modal.dart';
-import 'package:mason_sampler/src/core/widgets/stack_loader.dart';
+import 'package:mason_sampler/src/features/branches/presentation/widgets/branch_details.dart';
 
 
 class BranchPage extends HookConsumerWidget {
@@ -26,57 +21,12 @@ class BranchPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ///
-    /// loading variable
-    ///
-    final isLoading = useState(false);
-
-    ///
-    /// repo
-    ///
-    final repo = ref.read(branchRepositoryProvider);
 
     ///
     /// refresh
     ///
     refresh(String id) {
       ref.invalidate(branchControllerProvider(id));
-    }
-
-    ///
-    /// on tap
-    ///
-    tap(Branch branch) {
-      BranchFormPageRoute(id: branch.id).push(context);
-    }
-
-    ///
-    /// onDelete
-    ///
-    onDelete(Branch branch) async {
-      final fullTask = await
-          // 1. Call Confirm Modal
-          ConfirmModal.taskResult(context)
-              // 2. Delete Network Call
-              .flatMap((_) => repo.softDeleteMulti([branch.id]))
-              // 3. Side effects
-              .flatMap(
-                (_) => _handleSuccessfulDeleteTaskSidEffects(
-                  context: context,
-                  branchId: branch.id,
-                  refresh: refresh,
-                ),
-              );
-
-      isLoading.value = true;
-      final result = await fullTask.run();
-      isLoading.value = false;
-
-      // 4. Handle Error
-      result.match(
-        (failure) => _handleFailure(context, failure),
-        (_) {},
-      );
     }
 
     return Scaffold(
@@ -88,24 +38,7 @@ class BranchPage extends HookConsumerWidget {
           )
         ],
       ),
-      body: ref.watch(branchControllerProvider(id)).when(
-            error: (error, stack) => FailureMessage(error, stack),
-            loading: () => Center(child: CircularProgressIndicator()),
-            data: (branch) {
-              return StackLoader(
-                isLoading: isLoading.value,
-                child: CustomScrollView(
-                  slivers: [
-                    
-                    ///
-                    /// Add Content Here
-                    ///
-
-                  ],
-                ),
-              );
-            },
-          ),
+      body: BranchDetails(id),
     );
   }
 }

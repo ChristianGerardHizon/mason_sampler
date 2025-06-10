@@ -76,7 +76,7 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/utils/router_utils.dart',
     marker: "import 'package:hooks_riverpod/hooks_riverpod.dart';",
     newLine:
-        "import 'package:$packageNameSnake/src/core/utils/auth_router_utils.dart';",
+        "import 'package:$packageNameSnake/src/core/utils/${singularSnake}_router_utils.dart';",
     successMessage: 'Inserted auth router utils imports',
     alreadyExistsMessage: 'Auth router utils imports already exists',
     missingFileMessage: 'router utils file not found',
@@ -88,7 +88,7 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/utils/router_utils.dart',
     marker: 'if (isIgnored) return null;',
     newLine: '''
-    final authResult = await AuthRouterUtils.redirect(context, state, ref);
+    final authResult = await ${singularPascal}RouterUtils.redirect(context, state, ref);
     if (authResult != null) {
       return authResult;
     }
@@ -105,7 +105,8 @@ void run(HookContext context) {
     marker: "import 'package:flutter/material.dart';",
     newLine: '''
 import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/controllers/auth_controller.dart';
-import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/pages/_index.dart';''',
+import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/pages/_index.dart';
+import 'package:$packageNameSnake/src/core/widgets/stack_loader.dart';''',
     successMessage: 'Inserted auth controller import',
     alreadyExistsMessage: 'Auth controller import already exists',
     missingFileMessage: 'Application not found',
@@ -115,15 +116,29 @@ import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/pages/_
   injectLine(
     context: context,
     targetPath: 'lib/src/application.dart',
-    marker: 'final color = Color.fromARGB(0, 40, 122, 111);',
+    marker: 'builder: (context, child) {',
     newLine: '''
-    /// auth controller
-    final state = ref.watch(${singularSnake}ControllerProvider);
+              /// auth controller
+              final state = ref.watch(authControllerProvider);
 
-    if (state.isLoading) {
-      return const ${singularPascal}SplashPage();
-    }
-''',
+              return Stack(
+                children: [
+                  // 1) Always paint the real app (your router) as the bottom layer
+                  if (child != null) Positioned.fill(child: child),
+
+                  // 2) If we’re loading, overlay a semi-opaque barrier + spinner
+                  if (state.isLoading)
+                    Positioned.fill(
+                      child: Container(
+                        // match your scaffold / background color so there's never a flash of black:
+                        color: Theme.of(
+                          context,
+                        ).scaffoldBackgroundColor.withOpacity(0.8),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                ],
+              );''',
     successMessage: 'Inserted auth controller',
     alreadyExistsMessage: 'Auth controller already exists',
     missingFileMessage: 'Application not found',

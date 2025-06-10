@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mason_sampler/src/core/routing/router.dart'
-    show $appRoutes;
+    show $appRoutes, BranchesPageRoute;
 import 'package:mason_sampler/src/core/utils/router_utils.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,7 +30,7 @@ GoRouter router(Ref ref) {
 class RootRoute {
   const RootRoute();
 
-  static String path = '/';
+  static String path = BranchesPageRoute.path;
 
   go(BuildContext context) {
     context.go(path);

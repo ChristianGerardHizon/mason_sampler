@@ -4,24 +4,23 @@ class BranchesBranchData extends StatefulShellBranchData {
   const BranchesBranchData();
 
   static const shellBranch = TypedStatefulShellBranch<BranchesBranchData>(
-    routes: routes,
+    routes: <TypeRouteData>[
+      TypedGoRoute<BranchesPageRoute>(path: BranchesPageRoute.path),
+      TypedGoRoute<BranchFormPageRoute>(path: BranchFormPageRoute.path),
+      TypedGoRoute<BranchPageRoute>(path: BranchPageRoute.path),
+    ],
   );
 
-  static const routes = <TypeRouteData>[
-    TypedGoRoute<BranchesPageRoute>(path: BranchesPageRoute.path),
-    TypedGoRoute<BranchFormPageRoute>(path: BranchFormPageRoute.path),
-    TypedGoRoute<BranchPageRoute>(path: BranchPageRoute.path),
-  ];
 }
 
 
 ///
 /// List
 ///
-@TypedGoRoute<BranchesPageRoute>(path: BranchesPageRoute.path)
+
 class BranchesPageRoute extends GoRouteData {
   const BranchesPageRoute();
-  static const path = '/branches';
+  static const path = '/branches/list';
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -32,10 +31,10 @@ class BranchesPageRoute extends GoRouteData {
 ///
 /// Form
 ///
-@TypedGoRoute<BranchFormPageRoute>(path: BranchFormPageRoute.path)
+
 class BranchFormPageRoute extends GoRouteData {
   const BranchFormPageRoute({this.id});
-  static const path = '/form/branch';
+  static const path = '/branches/form';
 
   final String? id;
 
@@ -48,10 +47,10 @@ class BranchFormPageRoute extends GoRouteData {
 ///
 /// Details
 /// 
-@TypedGoRoute<BranchPageRoute>(path: BranchPageRoute.path)
+
 class BranchPageRoute extends GoRouteData {
   const BranchPageRoute(this.id);
-  static const path = '/branch/:id';
+  static const path = '/branches/id/:id';
 
   final String id;
 

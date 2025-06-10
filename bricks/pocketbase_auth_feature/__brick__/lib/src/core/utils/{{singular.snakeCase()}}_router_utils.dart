@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/routing/main.routes.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
 
-class AuthRouterUtils {
+class {{singular.pascalCase()}}RouterUtils {
   static FutureOr<String?> redirect(
     BuildContext context,
     GoRouterState state,

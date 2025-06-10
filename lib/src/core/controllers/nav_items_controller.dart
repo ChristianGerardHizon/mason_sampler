@@ -16,9 +16,19 @@ class NavItemsController extends _$NavItemsController {
         route: RootRoute.path,
         icon: Icon(MIcons.homeOutline),
         selectedIcon: Icon(MIcons.home),
-        label: 'Dashboard',
+        label: 'Branches',
         onTap: (context) {
           RootRoute().go(context);
+        },
+      ),
+
+      CustomNavigationBarItem(
+        route: CustomersPageRoute.path,
+        icon: Icon(MIcons.accountOutline),
+        selectedIcon: Icon(MIcons.account),
+        label: 'Customers',
+        onTap: (context) {
+          CustomersPageRoute().go(context);
         },
       ),
 

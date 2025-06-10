@@ -2,16 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
 import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_form_result.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/fields/{{singular.snakeCase()}}_fields.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_field.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_form_field_builder.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}_data.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/auth_data.dart';
 
 class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
   const {{singular.pascalCase()}}LoginPage({super.key, this.email});
@@ -22,6 +24,13 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isLoading = useState(false);
+
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next.valueOrNull is AuthData) {
+        RootRoute().go(context);
+      }
+    });
+
 
     ///
     /// Submit
@@ -40,7 +49,6 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
 
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         AppSnackBar.root(message: 'Success');
-        context.pop(r);
       });
     }
 

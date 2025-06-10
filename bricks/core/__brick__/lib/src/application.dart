@@ -11,8 +11,6 @@ class Application extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = Color.fromARGB(0, 40, 122, 111);
-
     return ThemeConsumer(
       child: ResponsiveApp(
         builder: (context) {

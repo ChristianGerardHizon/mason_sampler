@@ -28,7 +28,6 @@ class RouterUtils {
       return authResult;
     }
 
-
     // add redirect logic here
     // return null if continue or return the path to redireect to that page
 
