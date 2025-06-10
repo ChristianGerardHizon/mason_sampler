@@ -23,3 +23,6 @@ mason make core -c tools/core_config.json ; dart pub get ; dart run build_runner
 mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
 
 mason make pocketbase_auth_feature -c tools/pocketbase_auth_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs
+
+
+mason make core -c tools/core_config.json --on-conflict=overwrite ; mason make pocketbase_auth_feature -c tools/pocketbase_auth_feature_config.json --on-conflict=overwrite ; mason make pocketbase_feature -c tools/pocketbase_feature_config.json --on-conflict=overwrite; dart pub get ; dart run build_runner build --delete-conflicting-outputs ; dart run slang; dart run flutter_launcher_icons

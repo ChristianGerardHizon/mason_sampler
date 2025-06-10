@@ -10,6 +10,7 @@ class BranchesBranchData extends StatefulShellBranchData {
   ];
 }
 
+
 ///
 /// List
 ///
@@ -42,7 +43,7 @@ class BranchFormPageRoute extends GoRouteData {
 
 ///
 /// Details
-///
+/// 
 @TypedGoRoute<BranchPageRoute>(path: BranchPageRoute.path)
 class BranchPageRoute extends GoRouteData {
   const BranchPageRoute(this.id);

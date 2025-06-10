@@ -18,7 +18,7 @@ final rootKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
 @Riverpod(keepAlive: true)
 GoRouter router(Ref ref) {
   return GoRouter(
-    initialLocation: DefaultRoute.path,
+    initialLocation: RootRoute.path,
     debugLogDiagnostics: true,
     navigatorKey: rootKey,
     redirect: (context, state) => RouterUtils.redirect(context, state, ref),
@@ -27,12 +27,12 @@ GoRouter router(Ref ref) {
   );
 }
 
-class DefaultRoute {
-  const DefaultRoute();
+class RootRoute {
+  const RootRoute();
 
   static String path = '/';
 
-  static go(BuildContext context) {
+  go(BuildContext context) {
     context.go(path);
   }
 }

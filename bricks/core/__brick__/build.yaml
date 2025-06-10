@@ -8,5 +8,8 @@ targets:
           input_file_pattern: .i18n.json
           output_directory: lib/src/core/assets/i18n
           namespaces: true
-          flutterIntegration: true
-
+          flutterIntegration: true  
+      flutter_gen_runner: # or flutter_gen
+        options: 
+          output: lib/src/core/assets/ # Optional (default: lib/gen/)
+          line_length: 120 # Optional (default: 80)

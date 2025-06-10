@@ -1,7 +1,7 @@
 
 class PocketBaseCollections {
-  static const auths = 'auths';
   static const branches = 'branches';
+  static const auths = 'auths';
   
   // add collection names here sample
   // static const  = '';

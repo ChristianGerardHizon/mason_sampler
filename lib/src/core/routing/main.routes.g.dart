@@ -7,83 +7,15 @@ part of 'main.routes.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-  $authLoginPageRoute,
-  $authLogoutPageRoute,
-  $authDetailsPageRoute,
   $branchesPageRoute,
   $branchFormPageRoute,
   $branchPageRoute,
+  $authLoginPageRoute,
+  $authLogoutPageRoute,
+  $authDetailsPageRoute,
   $notFoundRoute,
+  $rootRouteData,
 ];
-
-RouteBase get $authLoginPageRoute => GoRouteData.$route(
-  path: '/login',
-
-  factory: $AuthLoginPageRouteExtension._fromState,
-);
-
-extension $AuthLoginPageRouteExtension on AuthLoginPageRoute {
-  static AuthLoginPageRoute _fromState(GoRouterState state) =>
-      AuthLoginPageRoute(email: state.uri.queryParameters['email']);
-
-  String get location => GoRouteData.$location(
-    '/login',
-    queryParams: {if (email != null) 'email': email},
-  );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $authLogoutPageRoute => GoRouteData.$route(
-  path: '/logout',
-
-  factory: $AuthLogoutPageRouteExtension._fromState,
-);
-
-extension $AuthLogoutPageRouteExtension on AuthLogoutPageRoute {
-  static AuthLogoutPageRoute _fromState(GoRouterState state) =>
-      const AuthLogoutPageRoute();
-
-  String get location => GoRouteData.$location('/logout');
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $authDetailsPageRoute => GoRouteData.$route(
-  path: '/auth',
-
-  factory: $AuthDetailsPageRouteExtension._fromState,
-);
-
-extension $AuthDetailsPageRouteExtension on AuthDetailsPageRoute {
-  static AuthDetailsPageRoute _fromState(GoRouterState state) =>
-      const AuthDetailsPageRoute();
-
-  String get location => GoRouteData.$location('/auth');
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
 
 RouteBase get $branchesPageRoute => GoRouteData.$route(
   path: '/branches',
@@ -155,6 +87,75 @@ extension $BranchPageRouteExtension on BranchPageRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
+RouteBase get $authLoginPageRoute => GoRouteData.$route(
+  path: '/login',
+
+  factory: $AuthLoginPageRouteExtension._fromState,
+);
+
+extension $AuthLoginPageRouteExtension on AuthLoginPageRoute {
+  static AuthLoginPageRoute _fromState(GoRouterState state) =>
+      AuthLoginPageRoute(email: state.uri.queryParameters['email']);
+
+  String get location => GoRouteData.$location(
+    '/login',
+    queryParams: {if (email != null) 'email': email},
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $authLogoutPageRoute => GoRouteData.$route(
+  path: '/logout',
+
+  factory: $AuthLogoutPageRouteExtension._fromState,
+);
+
+extension $AuthLogoutPageRouteExtension on AuthLogoutPageRoute {
+  static AuthLogoutPageRoute _fromState(GoRouterState state) =>
+      const AuthLogoutPageRoute();
+
+  String get location => GoRouteData.$location('/logout');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $authDetailsPageRoute => GoRouteData.$route(
+  path: '/auth',
+
+  factory: $AuthDetailsPageRouteExtension._fromState,
+);
+
+extension $AuthDetailsPageRouteExtension on AuthDetailsPageRoute {
+  static AuthDetailsPageRoute _fromState(GoRouterState state) =>
+      const AuthDetailsPageRoute();
+
+  String get location => GoRouteData.$location('/auth');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
 RouteBase get $notFoundRoute => GoRouteData.$route(
   path: '/not-found',
 
@@ -174,4 +175,14 @@ extension $NotFoundRouteExtension on NotFoundRoute {
       context.pushReplacement(location);
 
   void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $rootRouteData => StatefulShellRouteData.$route(
+  parentNavigatorKey: RootRouteData.$parentNavigatorKey,
+  restorationScopeId: RootRouteData.$restorationScopeId,
+  factory: $RootRouteDataExtension._fromState,
+);
+
+extension $RootRouteDataExtension on RootRouteData {
+  static RootRouteData _fromState(GoRouterState state) => const RootRouteData();
 }

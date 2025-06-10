@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:go_router/go_router.dart';
+// system imports
+import 'package:mason_sampler/src/core/routing/router.dart';
+import 'package:mason_sampler/src/core/models/custom_navbar_item.dart';
+import 'package:mason_sampler/src/core/models/type_defs.dart';
+
+class MobileBottomNav extends StatelessWidget {
+  final List<CustomNavigationBarItem> list;
+  final GoRouterState state;
+  final int index;
+
+  const MobileBottomNav({
+    super.key,
+    required this.list,
+    required this.index,
+    required this.state,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    ///
+    /// routes to show in the bottom nav
+    ///
+    final routes = <String>[];
+
+    final finalList = list
+        .mapWithIndex((item, index) {
+          if (routes.contains(item.route)) return item;
+          return null;
+        })
+        .whereType<CustomNavigationBarItem>()
+        .toList();
+
+    ///
+    ///
+    ///
+    bool shouldShowBottomNav(String? path) {
+      if (path == null) return false;
+      return routes.contains(path);
+    }
+
+    ///
+    ///
+    ///
+    onRouteChanged(int index, List<CustomNavigationBarItem> list) {
+      final item = list[index];
+      item.onTap?.call(context);
+    }
+
+    ///
+    ///
+    ///
+    int bottomNavIndeCalulator(int index, String? path) {
+      return 0;
+    }
+
+    ///
+    ///
+    ///
+    if (shouldShowBottomNav(state.fullPath) == false) {
+      return SizedBox();
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Divider(height: 0),
+        BottomNavigationBar(
+          items: finalList,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          elevation: 0,
+          currentIndex: bottomNavIndeCalulator(index, state.fullPath),
+          selectedFontSize: 13,
+          unselectedFontSize: 11,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          selectedIconTheme: IconThemeData(color: theme.colorScheme.primary),
+          selectedItemColor: theme.colorScheme.primary,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) => onRouteChanged(index, finalList),
+        ),
+      ],
+    );
+  }
+}

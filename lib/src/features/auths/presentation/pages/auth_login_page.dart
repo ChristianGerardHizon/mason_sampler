@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
 import 'package:mason_sampler/src/core/models/dynamic_form_result.dart';
 import 'package:mason_sampler/src/core/models/fields/auth_fields.dart';
-import 'package:mason_sampler/src/core/routing/router.dart';
 import 'package:mason_sampler/src/core/widgets/dynamic_form_fields/dynamic_field.dart';
 import 'package:mason_sampler/src/core/widgets/dynamic_form_fields/dynamic_form_field_builder.dart';
 import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
@@ -41,50 +40,52 @@ class AuthLoginPage extends HookConsumerWidget {
 
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         AppSnackBar.root(message: 'Success');
-        DefaultRoute.go(context);
+        context.pop(r);
       });
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
-        padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-        child: DynamicFormBuilder(
-          formKey: formKey,
-          isLoading: isLoading.value,
-          fields: [
-            DynamicSelectField(
-              initialValue: 'users',
-              name: AuthFields.type,
-              options: [
-                SelectOption(value: 'users', display: 'Users'),
-                SelectOption(value: 'admins', display: 'Admins'),
-              ],
-              decoration: const InputDecoration(
-                label: Text('Type'),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            DynamicTextField(
-              name: AuthFields.identity,
-              initialValue: email,
-              decoration: const InputDecoration(
-                label: Text('Email'),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            DynamicPasswordField(
-              name: AuthFields.password,
-              initialValue: email,
-              decoration: const InputDecoration(
-                label: Text('Password'),
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-          onSubmit: (result) => onSave(result),
-        ),
+      appBar: AppBar(
+        title: const Text('Login'),
       ),
+      body: Padding(
+      padding: EdgeInsets.only(top: 14, left: 20, right: 20),
+      child: DynamicFormBuilder(
+        formKey: formKey,
+        isLoading: isLoading.value,
+        fields: [
+          DynamicSelectField(
+            initialValue: 'users',
+            name: AuthFields.type,
+            options: [
+              SelectOption(value: 'users', display: 'Users'),
+              SelectOption(value: 'admins', display: 'Admins'),
+            ],
+            decoration: const InputDecoration(
+              label: Text('Type'),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          DynamicTextField(
+            name: AuthFields.identity,
+            initialValue: email,
+            decoration: const InputDecoration(
+              label: Text('Email'),
+              border: OutlineInputBorder(),
+            ),
+          ),
+          DynamicPasswordField(
+            name: AuthFields.password,
+            initialValue: email,
+            decoration: const InputDecoration(
+              label: Text('Password'),
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+        onSubmit: (result) => onSave(result),
+      ),
+    ),
     );
   }
 }
