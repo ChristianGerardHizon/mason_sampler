@@ -1,6 +1,7 @@
 {
     "packageName":"mason_sampler",
-    "singular":"customer",
-    "plural":"customers",
-    "isShellRoute": true
+    "singular":"admin",
+    "plural":"admins",
+    "isShellRoute": true,
+    "addToShellRoute": true
 }

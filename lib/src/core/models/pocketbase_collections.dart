@@ -1,5 +1,6 @@
 
 class PocketBaseCollections {
+  static const admins = 'admins';
   static const customers = 'customers';
   static const branches = 'branches';
   static const auths = 'auths';

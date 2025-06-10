@@ -5,6 +5,7 @@ import 'package:mason/mason.dart';
 
 void run(HookContext context) {
   final rawPlural = context.vars['plural'];
+  final rawAddToShellRoute = context.vars['addToShellRoute'];
   final rawPackageName = context.vars['packageName'];
   if (rawPlural == null) {
     context.logger
@@ -18,6 +19,7 @@ void run(HookContext context) {
   }
   final plural = rawPlural.toString();
   final packageName = rawPackageName.toString();
+  final addToShellRoute = bool.parse(rawAddToShellRoute.toString());
   final pluralSnake = _toSnakeCase(plural);
   final pluralPascal = _toPascalCase(plural);
   final pluralCamel = _toCamelCase(plural);
@@ -34,6 +36,20 @@ void run(HookContext context) {
     missingFileMessage: 'main.routes file not found',
     // force: false is the default, so you can omit it if you don't want forced insertion.
   );
+  if (addToShellRoute) {
+    // Example usage for routes:
+    injectLine(
+      context: context,
+      targetPath: 'common.routes.dart',
+      marker:
+          "static const branches = <TypedStatefulShellBranch<StatefulShellBranchData>>[",
+      newLine: "    ${pluralPascal}BranchData.shellBranch,",
+      successMessage: 'Inserted shell route part for `$plural`',
+      alreadyExistsMessage: 'Route part for `$plural` already exists',
+      missingFileMessage: 'common.routes.dart file not found',
+      // force: false is the default, so you can omit it if you don't want forced insertion.
+    );
+  }
 
   // add page to main.routes import
   injectLine(

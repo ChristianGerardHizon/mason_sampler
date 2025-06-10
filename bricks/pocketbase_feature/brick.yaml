@@ -46,4 +46,9 @@ vars:
     description: Whether the feature should be a shell route
     default: false
     prompt: Is shell route?
+  addToShellRoute:
+    type: boolean
+    description: Whether the feature should be added to the shell route
+    default: false
+    prompt: Add to shell route?
     
