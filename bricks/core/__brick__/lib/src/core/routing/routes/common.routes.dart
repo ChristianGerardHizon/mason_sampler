@@ -23,5 +23,7 @@ class RootRouteData extends StatefulShellRouteData {
   Widget builder(context, state, navigationShell) =>
       AppRoot(shell: navigationShell, routerState: state);
 
-  static const branches = <TypedStatefulShellBranch<StatefulShellBranchData>>[];
+  static const branches = <TypedStatefulShellBranch<StatefulShellBranchData>>[
+    // add shell branches here
+  ];
 }

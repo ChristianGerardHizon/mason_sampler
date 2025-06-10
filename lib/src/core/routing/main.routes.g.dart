@@ -181,6 +181,27 @@ RouteBase get $rootRouteData => StatefulShellRouteData.$route(
   parentNavigatorKey: RootRouteData.$parentNavigatorKey,
   restorationScopeId: RootRouteData.$restorationScopeId,
   factory: $RootRouteDataExtension._fromState,
+  branches: [
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
+          path: '/branches',
+
+          factory: $BranchesPageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/form/branch',
+
+          factory: $BranchFormPageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/branch/:id',
+
+          factory: $BranchPageRouteExtension._fromState,
+        ),
+      ],
+    ),
+  ],
 );
 
 extension $RootRouteDataExtension on RootRouteData {

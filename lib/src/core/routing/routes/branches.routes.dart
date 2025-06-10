@@ -3,6 +3,10 @@ part of '../main.routes.dart';
 class BranchesBranchData extends StatefulShellBranchData {
   const BranchesBranchData();
 
+  static const shellBranch = TypedStatefulShellBranch<BranchesBranchData>(
+    routes: routes,
+  );
+
   static const routes = <TypeRouteData>[
     TypedGoRoute<BranchesPageRoute>(path: BranchesPageRoute.path),
     TypedGoRoute<BranchFormPageRoute>(path: BranchFormPageRoute.path),
