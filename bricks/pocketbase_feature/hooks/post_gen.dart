@@ -30,9 +30,9 @@ void run(HookContext context) {
     context: context,
     targetPath: 'lib/src/core/routing/main.routes.dart',
     marker: "part 'main.routes.g.dart';",
-    newLine: "part 'routes/$plural.routes.dart';",
-    successMessage: 'Inserted route part for `$plural`',
-    alreadyExistsMessage: 'Route part for `$plural` already exists',
+    newLine: "part 'routes/$pluralCamel.routes.dart';",
+    successMessage: 'Inserted route part for `$pluralCamel`',
+    alreadyExistsMessage: 'Route part for `$pluralCamel` already exists',
     missingFileMessage: 'main.routes file not found',
     // force: false is the default, so you can omit it if you don't want forced insertion.
   );
