@@ -56,7 +56,7 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/routing/main.routes.dart',
     marker: "import 'package:go_router/go_router.dart';",
     newLine:
-        "import 'package:$packageName/src/features/$pluralSnake/presentation/pages/_index.dart';",
+        "import 'package:$packageNameSnake/src/features/$pluralSnake/presentation/pages/_index.dart';",
     successMessage: 'Inserted import part for `$plural`',
     alreadyExistsMessage: 'Import part for `$plural` already exists',
     missingFileMessage: 'main.routes file not found',
