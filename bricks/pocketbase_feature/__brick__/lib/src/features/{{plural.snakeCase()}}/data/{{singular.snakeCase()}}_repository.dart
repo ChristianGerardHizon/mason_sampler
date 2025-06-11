@@ -5,7 +5,7 @@ import 'package:{{packageName.snakeCase()}}/src/core/packages/pocketbase.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/pocketbase_collections.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/page_results.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.camelCase()}}/domain/{{singular.camelCase()}}.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:pocketbase/pocketbase.dart';

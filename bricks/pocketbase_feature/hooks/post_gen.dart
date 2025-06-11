@@ -70,7 +70,7 @@ void run(HookContext context) {
     targetPath: 'lib/src/core/models/pocketbase_collections.dart',
     // Look for the opening of the class; we’ll insert right after this marker
     marker: 'class PocketBaseCollections {',
-    newLine: '  static const $pluralSnake = \'$pluralCamel\';',
+    newLine: '  static const $pluralCamel = \'$pluralCamel\';',
     successMessage: 'Inserted PocketBase collection `$pluralSnake`',
     alreadyExistsMessage: 'PocketBase collection `$pluralSnake` already exists',
     missingFileMessage: 'PocketBase collections file not found',
