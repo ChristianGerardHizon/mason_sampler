@@ -55,7 +55,7 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
       loading: () => Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('Form Error')),
       data: (formState) {
-        final {{singular.snakeCase()}} = formState.{{singular.snakeCase()}};
+        final {{singular.snakeCase()}} = formState.{{singular.camelCase()}};
 
         return Padding(
           padding: EdgeInsets.only(top: 14, left: 20, right: 20),
