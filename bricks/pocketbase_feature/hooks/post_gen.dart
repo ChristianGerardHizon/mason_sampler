@@ -30,7 +30,7 @@ void run(HookContext context) {
     context: context,
     targetPath: 'lib/src/core/routing/main.routes.dart',
     marker: "part 'main.routes.g.dart';",
-    newLine: "part 'routes/$pluralCamel.routes.dart';",
+    newLine: "part 'routes/$pluralSnake.routes.dart';",
     successMessage: 'Inserted route part for `$pluralCamel`',
     alreadyExistsMessage: 'Route part for `$pluralCamel` already exists',
     missingFileMessage: 'main.routes file not found',
