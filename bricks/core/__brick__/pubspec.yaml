@@ -1,4 +1,4 @@
-name: {{packageName.camelCase()}}
+name: {{packageName.snakeCase()}}
 description: "A new Flutter project."
 
 publish_to: 'none'
