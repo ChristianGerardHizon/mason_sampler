@@ -27,7 +27,16 @@ class MobileBottomNav extends StatelessWidget {
     ///
     final routes = <String>[RootRoute.path];
 
-    final finalList = list
+    final combinedList = [
+      ...list,
+      CustomNavigationBarItem(
+        route: RootRoute.path,
+        icon: Icon(Icons.more),
+        label: 'More',
+      ),
+    ];
+
+    final finalList = combinedList
         .mapWithIndex((item, index) {
           if (routes.contains(item.route)) return item;
           return null;
