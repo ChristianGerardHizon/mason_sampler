@@ -112,6 +112,25 @@ RouteBase get $rootRouteData => StatefulShellRouteData.$route(
     StatefulShellBranchData.$branch(
       routes: [
         GoRouteData.$route(
+          path: '/admins/list',
+
+          factory: $AdminsPageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/admins/form',
+
+          factory: $AdminFormPageRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/admins/id/:id',
+
+          factory: $AdminPageRouteExtension._fromState,
+        ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(
           path: '/branches/list',
 
           factory: $BranchesPageRouteExtension._fromState,
@@ -152,6 +171,58 @@ RouteBase get $rootRouteData => StatefulShellRouteData.$route(
 
 extension $RootRouteDataExtension on RootRouteData {
   static RootRouteData _fromState(GoRouterState state) => const RootRouteData();
+}
+
+extension $AdminsPageRouteExtension on AdminsPageRoute {
+  static AdminsPageRoute _fromState(GoRouterState state) =>
+      const AdminsPageRoute();
+
+  String get location => GoRouteData.$location('/admins/list');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $AdminFormPageRouteExtension on AdminFormPageRoute {
+  static AdminFormPageRoute _fromState(GoRouterState state) =>
+      AdminFormPageRoute(id: state.uri.queryParameters['id']);
+
+  String get location => GoRouteData.$location(
+    '/admins/form',
+    queryParams: {if (id != null) 'id': id},
+  );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $AdminPageRouteExtension on AdminPageRoute {
+  static AdminPageRoute _fromState(GoRouterState state) =>
+      AdminPageRoute(state.pathParameters['id']!);
+
+  String get location =>
+      GoRouteData.$location('/admins/id/${Uri.encodeComponent(id)}');
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $BranchesPageRouteExtension on BranchesPageRoute {

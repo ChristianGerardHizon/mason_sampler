@@ -40,14 +40,13 @@ void run(HookContext context) {
     // Example usage for routes:
     injectLine(
       context: context,
-      targetPath: 'common.routes.dart',
+      targetPath: 'lib/src/core/routing/routes/common.routes.dart',
       marker:
           "static const branches = <TypedStatefulShellBranch<StatefulShellBranchData>>[",
       newLine: "    ${pluralPascal}BranchData.shellBranch,",
       successMessage: 'Inserted shell route part for `$plural`',
       alreadyExistsMessage: 'Route part for `$plural` already exists',
       missingFileMessage: 'common.routes.dart file not found',
-      // force: false is the default, so you can omit it if you don't want forced insertion.
     );
   }
 

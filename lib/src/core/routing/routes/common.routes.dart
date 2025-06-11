@@ -24,6 +24,7 @@ class RootRouteData extends StatefulShellRouteData {
       AppRoot(shell: navigationShell, routerState: state);
 
   static const branches = <TypedStatefulShellBranch<StatefulShellBranchData>>[
+    AdminsBranchData.shellBranch,
     // add shell branches here
     BranchesBranchData.shellBranch,
     CustomersBranchData.shellBranch,
