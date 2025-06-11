@@ -49,6 +49,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
 
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         AppSnackBar.root(message: 'Success');
+        ref.read({{singular.camelCase()}}ControllerProvider.notifier).setUser(r);
       });
     }
 
