@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// system imports
-import 'package:mason_sampler/src/features/{{plural.snakeCase()}}/presentation/widgets/{{singular.snakeCase()}}_form.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/widgets/{{singular.snakeCase()}}_form.dart';
 
 class {{singular.pascalCase()}}FormPage extends HookConsumerWidget {
   const {{singular.pascalCase()}}FormPage({super.key, this.id});
