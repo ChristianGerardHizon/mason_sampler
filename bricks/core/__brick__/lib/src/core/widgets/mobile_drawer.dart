@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mason_sampler/src/core/controllers/scaffold_controller.dart';
-import 'package:mason_sampler/src/core/models/type_defs.dart';
-import 'package:mason_sampler/src/core/widgets/logo.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/controllers/scaffold_controller.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/logo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MobileDrawer extends HookConsumerWidget {

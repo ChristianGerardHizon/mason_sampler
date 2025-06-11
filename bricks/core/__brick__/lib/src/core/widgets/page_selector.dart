@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 
 class PageSelector extends HookWidget {
   const PageSelector({
