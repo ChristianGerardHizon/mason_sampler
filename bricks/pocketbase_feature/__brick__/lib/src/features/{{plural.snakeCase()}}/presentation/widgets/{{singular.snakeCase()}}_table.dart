@@ -25,7 +25,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
     final tableKey = '{{singular.snakeCase()}}';
     final provider = tableControllerProvider(tableKey);
     final notifier = ref.read(provider.notifier);
-    final listProvider = {{singular.snakeCase()}}TableControllerProvider(tableKey);
+    final listProvider = {{singular.camelCase()}}TableControllerProvider(tableKey);
     final listState = ref.watch(listProvider);
 
     ///
@@ -39,7 +39,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
     /// onRefresh
     ///
     onRefresh() {
-      ref.invalidate({{singular.snakeCase()}}TableControllerProvider);
+      ref.invalidate({{singular.camelCase()}}TableControllerProvider);
       ref.invalidate(provider);
       notifier.clearSelection();
     }
@@ -50,14 +50,14 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
     onDelete(List<{{singular.pascalCase()}}> items) async {
       final confirm = await ConfirmModal.show(context);
       if (confirm != true) return;
-      final repo = ref.read({{singular.snakeCase()}}RepositoryProvider);
+      final repo = ref.read({{singular.camelCase()}}RepositoryProvider);
       final ids = items.map((e) => e.id).toList();
       // isLoading.value = true;
       final result = await repo.softDeleteMulti(ids).run();
       // if (context.mounted) isLoading.value = false;
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         notifier.clearSelection();
-        ref.invalidate({{singular.snakeCase()}}TableControllerProvider);
+        ref.invalidate({{singular.camelCase()}}TableControllerProvider);
         AppSnackBar.root(message: 'Successfully Deleted');
       });
     }

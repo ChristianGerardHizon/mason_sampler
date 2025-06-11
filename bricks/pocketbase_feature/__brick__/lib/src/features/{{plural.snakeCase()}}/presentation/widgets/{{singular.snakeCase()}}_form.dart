@@ -24,7 +24,7 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isLoading = useState(false);
-    final provider = ref.watch({{singular.snakeCase()}}FormControllerProvider(id));
+    final provider = ref.watch({{singular.camelCase()}}FormControllerProvider(id));
 
     ///
     /// Submit
@@ -32,7 +32,7 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
     void onSave({{singular.pascalCase()}}? {{singular.snakeCase()}}, DynamicFormResult formResult) async {
       isLoading.value = true;
 
-      final repository = ref.read({{singular.snakeCase()}}RepositoryProvider);
+      final repository = ref.read({{singular.camelCase()}}RepositoryProvider);
       final value = formResult.values;
       final files = formResult.files;
 
@@ -46,7 +46,7 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
 
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         AppSnackBar.root(message: 'Success');
-        ref.invalidate({{singular.snakeCase()}}TableControllerProvider);
+        ref.invalidate({{singular.camelCase()}}TableControllerProvider);
         context.pop(r);
       });
     }
