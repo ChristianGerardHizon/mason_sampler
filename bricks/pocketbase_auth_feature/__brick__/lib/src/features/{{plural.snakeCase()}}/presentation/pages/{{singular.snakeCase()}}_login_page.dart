@@ -38,10 +38,12 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
     void onSave(DynamicFormResult formResult) async {
       isLoading.value = true;
 
-      final repository = ref.read({{singular.snakeCase()}}RepositoryProvider);
+      final repository = ref.read(authRepositoryProvider);
       final value = formResult.values;
 
-      final task = repository.login(value);
+      final task = repository
+          .login(value)
+          .flatMap(ref.read(authControllerProvider.notifier).setUser);
 
       final result = await task.run();
 
@@ -49,7 +51,6 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
 
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         AppSnackBar.root(message: 'Success');
-        ref.read({{singular.camelCase()}}ControllerProvider.notifier).setUser(r);
       });
     }
 
