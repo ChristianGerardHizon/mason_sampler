@@ -38,12 +38,12 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
     void onSave(DynamicFormResult formResult) async {
       isLoading.value = true;
 
-      final repository = ref.read(authRepositoryProvider);
+      final repository = ref.read({{singular.pascalCase()}}RepositoryProvider);
       final value = formResult.values;
 
       final task = repository
           .login(value)
-          .flatMap(ref.read(authControllerProvider.notifier).setUser);
+          .flatMap(ref.read({{singular.pascalCase()}}ControllerProvider.notifier).setUser);
 
       final result = await task.run();
 
