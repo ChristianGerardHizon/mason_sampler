@@ -1,4 +1,4 @@
 {
     "packageName":"mason_sampler",
-    "hasPocketbase": true
+    "hasPocketbase": false
 }

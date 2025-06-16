@@ -1,0 +1,7 @@
+{
+    "packageName":"mason_sampler",
+    "singular":"uc timesheet",
+    "plural":"uc timesheets",
+    "isShellRoute": true,
+    "addToShellRoute": true
+}

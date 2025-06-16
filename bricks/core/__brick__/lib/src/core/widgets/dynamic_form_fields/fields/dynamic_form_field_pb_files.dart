@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+{{#hasPocketbase}}import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:file_picker/file_picker.dart';
@@ -305,3 +305,4 @@ Future<List<PBFile>> pickAndCompressImages({
   final combined = [...existingImages, ...newImages];
   return combined.take(field.maxFiles).toList();
 }
+{{/hasPocketbase}}

@@ -8,5 +8,7 @@ bricks:
     path: ./bricks/pocketbase_auth_feature
   core:
     path: ./bricks/core
+  feature:
+    path: ./bricks/feature
 
 

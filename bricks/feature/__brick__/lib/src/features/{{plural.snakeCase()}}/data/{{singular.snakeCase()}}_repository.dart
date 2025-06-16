@@ -1,13 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:pocketbase/pocketbase.dart';
+import 'package:mason_sampler/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 // system import
-import 'package:{{packageName.snakeCase()}}/src/core/models/fields/pb_field.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/page_results.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
-
+import 'package:{{packageName.snakeCase()}}/src/core/models/page_results.dart';
 
 part '{{singular.snakeCase()}}_repository.g.dart';
 
@@ -16,12 +12,48 @@ part '{{singular.snakeCase()}}_repository.g.dart';
   return {{singular.pascalCase()}}RepositoryImpl();
 }
 
-class {{singular.pascalCase()}}Repository {
-  ///
-  /// Fetches a list of [{{singular.pascalCase()}}]s from the server.
-  ///
+abstract class {{singular.pascalCase()}}Repository {
+  /// get
+  TaskResult<{{singular.pascalCase()}}> get(String id);
+
+  /// update
+  TaskResult<{{singular.pascalCase()}}> update(
+    {{singular.pascalCase()}} {{singular.camelCase()}},
+    Map<String, dynamic> update,
+  );
+
+  /// delete
+  TaskResult<void> delete(List<String> ids);
+
+  /// list
+  TaskResult<PageResults<{{singular.pascalCase()}}>> list({int pageNo = 0, int pageSize = 0});
 }
 
 class {{singular.pascalCase()}}RepositoryImpl extends {{singular.pascalCase()}}Repository {
-  
+  @override
+  TaskResult<void> delete(List<String> ids) {
+    // TODO: implement delete
+    throw UnimplementedError();
+  }
+
+  @override
+  TaskResult<{{singular.pascalCase()}}> get(String id) {
+    // TODO: implement get
+    throw UnimplementedError();
+  }
+
+  @override
+  TaskResult<PageResults<{{singular.pascalCase()}}>> list({int pageNo = 0, int pageSize = 0}) {
+    // TODO: implement list
+    throw UnimplementedError();
+  }
+
+  @override
+  TaskResult<{{singular.pascalCase()}}> update(
+    {{singular.pascalCase()}} {{singular.camelCase()}},
+    Map<String, dynamic> update,
+  ) {
+    // TODO: implement update
+    throw UnimplementedError();
+  }
 }

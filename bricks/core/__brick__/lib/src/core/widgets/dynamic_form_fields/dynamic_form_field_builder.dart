@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_form_result.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/pb_file.dart';
+{{#hasPocketbase}}import 'package:{{packageName.snakeCase()}}/src/core/models/pb_file.dart';{{/hasPocketbase}}
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,8 +50,8 @@ class DynamicFormBuilder extends HookConsumerWidget {
             f.fieldTransformer!(value),
           DynamicDateField f when f.fieldTransformer != null =>
             f.fieldTransformer!(value as DateTime?),
-          DynamicPBFilesField f when f.fieldTransformer != null =>
-            f.fieldTransformer!(value as List<PBFile>?),
+          {{#hasPocketbase}}DynamicPBFilesField f when f.fieldTransformer != null =>
+            f.fieldTransformer!(value as List<PBFile>?),{{/hasPocketbase}}
           DynamicDateTimeField f when f.fieldTransformer != null =>
             f.fieldTransformer!(value as DateTime?),
           _ => value,
@@ -60,18 +60,21 @@ class DynamicFormBuilder extends HookConsumerWidget {
       }
 
       final transformedFiles = List<http.MultipartFile>.empty(growable: true);
+      {{#hasPocketbase}}
       for (final field in fields) {
         final value = rawValues[field.name];
-
+        
         // Apply the fieldTransformer if it exists
         final transformed = switch (field) {
           DynamicPBFilesField f when f.fileTransformer != null =>
             f.fileTransformer!(value as List<PBFile>?),
           _ => value,
         };
+
         if (transformed is List<Future<http.MultipartFile>>)
           transformedFiles.addAll(await Future.wait(transformed));
       }
+      {{/hasPocketbase}}
 
       // Now you can use transformedValues as needed
       // print('Transformed Values: $transformedValues');

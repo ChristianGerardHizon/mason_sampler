@@ -46,11 +46,11 @@ class DynamicFormField extends HookWidget {
           if (field is DynamicImagesField) {
             return DynamicFormFieldImages(field as DynamicImagesField);
           }
-
+          {{#hasPocketbase}}
           if (field is DynamicPBFilesField) {
             return DynamicFormFieldPBFiles(field as DynamicPBFilesField);
           }
-
+          {{/hasPocketbase}}
           if (field is DynamicTypeAheadField) {
             return DynamicFormFieldTypeAhead(field as DynamicTypeAheadField);
           }

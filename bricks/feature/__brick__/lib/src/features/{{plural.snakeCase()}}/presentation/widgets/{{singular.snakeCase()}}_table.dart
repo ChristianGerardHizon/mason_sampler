@@ -53,7 +53,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
       final repo = ref.read({{singular.camelCase()}}RepositoryProvider);
       final ids = items.map((e) => e.id).toList();
       // isLoading.value = true;
-      final result = await repo.softDeleteMulti(ids).run();
+      final result = await repo.delete(ids).run();
       // if (context.mounted) isLoading.value = false;
       result.fold((l) => AppSnackBar.rootFailure(l), (r) {
         notifier.clearSelection();
