@@ -51,25 +51,25 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
     ///
     /// on tap
     ///
-    tap({{singular.pascalCase()}} {{singular.snakeCase()}}) {
-      {{singular.pascalCase()}}FormPageRoute(id: {{singular.snakeCase()}}.id).push(context);
+    tap({{singular.pascalCase()}} {{singular.camelCase()}}) {
+      {{singular.pascalCase()}}FormPageRoute(id: {{singular.camelCase()}}.id).push(context);
     }
 
     ///
     /// onDelete
     ///
-    onDelete({{singular.pascalCase()}} {{singular.snakeCase()}}) async {
+    onDelete({{singular.pascalCase()}} {{singular.camelCase()}}) async {
       final fullTask =
           await
           // 1. Call Confirm Modal
           ConfirmModal.taskResult(context)
               // 2. Delete Network Call
-              .flatMap((_) => repo.softDeleteMulti([{{singular.snakeCase()}}.id]))
+              .flatMap((_) => repo.softDeleteMulti([{{singular.camelCase()}}.id]))
               // 3. Side effects
               .flatMap(
                 (_) => _handleSuccessfulDeleteTaskSidEffects(
                   context: context,
-                  {{singular.snakeCase()}}Id: {{singular.snakeCase()}}.id,
+                  {{singular.camelCase()}}Id: {{singular.camelCase()}}.id,
                   refresh: refresh,
                 ),
               );
@@ -85,7 +85,7 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
     return state.when(
       error: (error, stack) => FailureMessage(error, stack),
       loading: () => Center(child: CircularProgressIndicator()),
-      data: ({{singular.pascalCase()}} {{singular.snakeCase()}}) {
+      data: ({{singular.pascalCase()}} {{singular.camelCase()}}) {
         return StackLoader(
           isLoading: isLoading.value,
           child: CustomScrollView(
@@ -108,7 +108,7 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
                     ),
                     header: '{{singular.pascalCase()}} Information',
                     items: [
-                      DynamicGroupItem.text(title: 'Id', value: {{singular.snakeCase()}}.id),
+                      DynamicGroupItem.text(title: 'Id', value: {{singular.camelCase()}}.id),
                     ],
                   ),
 
@@ -124,14 +124,14 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
                     header: 'Actions',
                     items: [
                       DynamicGroupItem.action(
-                        onTap: () => tap({{singular.snakeCase()}}),
+                        onTap: () => tap({{singular.camelCase()}}),
                         leading: Icon(MIcons.fileEditOutline),
                         title: 'Edit Details',
                         trailing: Icon(MIcons.chevronRight),
                       ),
                       DynamicGroupItem.action(
                         titleColor: Theme.of(context).colorScheme.error,
-                        onTap: () => onDelete({{singular.snakeCase()}}),
+                        onTap: () => onDelete({{singular.camelCase()}}),
                         leading: Icon(
                           MIcons.trashCan,
                           color: Theme.of(context).colorScheme.error,
@@ -162,14 +162,14 @@ class {{singular.pascalCase()}}Details extends HookConsumerWidget {
 ///
 TaskResult<void> _handleSuccessfulDeleteTaskSidEffects({
   required BuildContext context,
-  required String {{singular.snakeCase()}}Id,
+  required String {{singular.camelCase()}}Id,
   required void Function(String id) refresh,
 }) {
   return Task<void>(() async {
     if (!context.mounted) return;
     AppSnackBar.root(message: 'Successfully Deleted');
     if (context.canPop()) context.pop();
-    refresh({{singular.snakeCase()}}Id);
+    refresh({{singular.camelCase()}}Id);
     return null;
   }).toTaskEither<Failure>();
 }

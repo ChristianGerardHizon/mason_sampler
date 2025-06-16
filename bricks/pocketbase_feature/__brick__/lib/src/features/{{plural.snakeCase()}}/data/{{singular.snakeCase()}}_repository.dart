@@ -72,6 +72,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
         page: pageNo,
         perPage: pageSize,
         sort: sort,
+        expand: expand,
       );
       return PageResults(
         page: result.page,
@@ -81,7 +82,6 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
         items: result.items.map<{{singular.pascalCase()}}>((e) {
           return mapToData(e.toJson());
         }).toList(),
-        expand: expand,
       );
     }, Failure.handle);
   }

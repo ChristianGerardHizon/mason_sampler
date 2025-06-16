@@ -11,7 +11,6 @@ import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_table/slive
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/failure_message.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/confirm_modal.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/refresh_button.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_table_controller.dart';
@@ -22,7 +21,7 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchCtrl = useTextEditingController();
-    final tableKey = '{{singular.snakeCase()}}';
+    final tableKey = '{{singular.camelCase()}}';
     final provider = tableControllerProvider(tableKey);
     final notifier = ref.read(provider.notifier);
     final listProvider = {{singular.camelCase()}}TableControllerProvider(tableKey);
@@ -31,8 +30,8 @@ class {{singular.pascalCase()}}Table extends HookConsumerWidget {
     ///
     /// onTap
     ///
-    onTap({{singular.pascalCase()}} {{singular.snakeCase()}}) {
-      {{singular.pascalCase()}}PageRoute({{singular.snakeCase()}}.id).push(context);
+    onTap({{singular.pascalCase()}} {{singular.camelCase()}}) {
+      {{singular.pascalCase()}}PageRoute({{singular.camelCase()}}.id).push(context);
     }
 
     ///

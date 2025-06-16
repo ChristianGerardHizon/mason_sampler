@@ -15,13 +15,13 @@ class AuthLogoutPage extends HookConsumerWidget {
       }
 
       if (next.hasError) {
-        {{singular.snakeCase()}}LoginPageRoute().go(context);
+        {{singular.pascalCase()}}LoginPageRoute().go(context);
       }
     });
 
     logout() async {
       await Future.delayed(const Duration(seconds: 1));
-      await ref.read({{singular.pascalCase()}}ControllerProvider.notifier).logout().run();
+      await ref.read({{singular.camelCase()}}ControllerProvider.notifier).logout().run();
     }
 
     useEffect(() {

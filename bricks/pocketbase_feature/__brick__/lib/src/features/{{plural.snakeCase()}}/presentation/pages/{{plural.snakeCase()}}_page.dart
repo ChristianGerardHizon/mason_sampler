@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/widgets/{{singular.snakeCase()}}_table.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_table_controller.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/refresh_button.dart';
 
 class {{plural.pascalCase()}}Page extends HookConsumerWidget {
   const {{plural.pascalCase()}}Page({super.key});
@@ -13,7 +15,14 @@ class {{plural.pascalCase()}}Page extends HookConsumerWidget {
     ///
     ///
     return Scaffold(
-      appBar: AppBar(title: Text('{{plural.pascalCase()}} Page')),
+        appBar: AppBar(
+        title: const Text('{{singular.pascalCase()}} Details'),
+        actions: [
+          RefreshButton(
+            onPressed: () => ref.invalidate({{singular.camelCase()}}TableControllerProvider),
+          )
+        ],
+      ),      
       body: {{singular.pascalCase()}}Table(),
     );
   }
