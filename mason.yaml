@@ -10,5 +10,7 @@ bricks:
     path: ./bricks/core
   feature:
     path: ./bricks/feature
+  auth_feature:
+    path: ./bricks/auth_feature
 
 
