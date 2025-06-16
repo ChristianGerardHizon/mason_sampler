@@ -47,7 +47,7 @@ class {{singular.pascalCase()}}Controller extends _${{singular.pascalCase()}}Con
     return ref.read({{singular.camelCase()}}RepositoryProvider).refresh().chainFirst(setUser);
   }
 
-  TaskResult<{{singular.pascalCase()}}Data> login({{singular.pascalCase()}}DataType type, Map<String, dynamic> map) {
+  TaskResult<{{singular.pascalCase()}}Data> login(Map<String, dynamic> map) {
     final repo = ref.read({{singular.camelCase()}}RepositoryProvider);
     return repo.login(map).chainFirst(setUser);
   }

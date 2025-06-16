@@ -12,7 +12,6 @@ import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/auth_data.dart';
 
 class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
@@ -63,19 +62,8 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       child: DynamicFormBuilder(
         formKey: formKey,
         isLoading: isLoading.value,
+        itemPadding: const EdgeInsets.only(top: 20),
         fields: [
-          DynamicSelectField(
-            initialValue: '{{childPlural.snakeCase()}}',
-            name: {{singular.pascalCase()}}Fields.type,
-            options: [
-              SelectOption(value: '{{childPlural.snakeCase()}}', display: '{{childPlural.pascalCase()}}'),
-              SelectOption(value: '{{parentPlural.snakeCase()}}', display: '{{parentPlural.pascalCase()}}'),
-            ],
-            decoration: const InputDecoration(
-              label: Text('Type'),
-              border: OutlineInputBorder(),
-            ),
-          ),
           DynamicTextField(
             name: {{singular.pascalCase()}}Fields.identity,
             initialValue: email,
