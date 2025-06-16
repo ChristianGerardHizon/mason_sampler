@@ -31,10 +31,12 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
     return {{singular.pascalCase()}}.fromMap(map);
   }
 
+  final expand = '';
+
   @override
   TaskResult<{{singular.pascalCase()}}> get(String id) {
     return TaskResult.tryCatch(() async {
-      final result = await collection.getOne(id);
+      final result = await collection.getOne(id, expand: expand);
       return mapToData(result.toJson());
     }, Failure.handle);
   }
@@ -45,7 +47,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
     List<MultipartFile> files = const [],
   }) {
     return TaskResult.tryCatch(() async {
-      final response = await collection.create(body: payload, files: files);
+      final response = await collection.create(body: payload, files: files, expand: expand);
       return mapToData(response.toJson());
     }, Failure.handle);
   }
@@ -79,6 +81,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
         items: result.items.map<{{singular.pascalCase()}}>((e) {
           return mapToData(e.toJson());
         }).toList(),
+        expand: expand,
       );
     }, Failure.handle);
   }
@@ -96,6 +99,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
         history.id,
         body: combinedMap,
         files: files,
+        expand: expand,
       );
       return mapToData(result.toJson());
     }, Failure.handle);
@@ -121,7 +125,7 @@ class {{singular.pascalCase()}}RepositoryImpl extends PBCollectionRepository<{{s
     String? sort,
   }) {
     return TaskResult.tryCatch(() async {
-      final result = await collection.getFullList(filter: filter, sort: sort);
+      final result = await collection.getFullList(filter: filter, sort: sort, expand: expand);
       return result.map<{{singular.pascalCase()}}>((e) => mapToData(e.toJson())).toList();
     }, Failure.handle);
   }
