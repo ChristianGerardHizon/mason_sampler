@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
+import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/controllers/scaffold_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/custom_navbar_item.dart';

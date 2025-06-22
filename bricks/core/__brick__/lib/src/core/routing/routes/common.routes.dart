@@ -1,7 +1,7 @@
 part of '../main.routes.dart';
 
 @TypedGoRoute<NotFoundRoute>(path: NotFoundRoute.path)
-class NotFoundRoute extends GoRouteData {
+class NotFoundRoute extends GoRouteData with _$NotFoundRoute {
   const NotFoundRoute();
   static const path = '/not-found';
 

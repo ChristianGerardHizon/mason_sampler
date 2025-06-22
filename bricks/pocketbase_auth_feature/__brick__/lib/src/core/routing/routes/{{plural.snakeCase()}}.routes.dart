@@ -14,7 +14,7 @@ class {{plural.pascalCase()}}BranchData extends StatefulShellBranchData {
 /// Login
 ///
 @TypedGoRoute<{{singular.pascalCase()}}LoginPageRoute>(path: {{singular.pascalCase()}}LoginPageRoute.path)
-class {{singular.pascalCase()}}LoginPageRoute extends GoRouteData {
+class {{singular.pascalCase()}}LoginPageRoute extends GoRouteData with _${{singular.pascalCase()}}LoginPageRoute {
   const {{singular.pascalCase()}}LoginPageRoute({this.email});
   static const path = '/login';
 
@@ -30,7 +30,7 @@ class {{singular.pascalCase()}}LoginPageRoute extends GoRouteData {
 /// Logout
 ///
 @TypedGoRoute<{{singular.pascalCase()}}LogoutPageRoute>(path: {{singular.pascalCase()}}LogoutPageRoute.path)
-class {{singular.pascalCase()}}LogoutPageRoute extends GoRouteData {
+class {{singular.pascalCase()}}LogoutPageRoute extends GoRouteData with _${{singular.pascalCase()}}LogoutPageRoute {
   const {{singular.pascalCase()}}LogoutPageRoute();
   static const path = '/logout';
 
@@ -45,7 +45,7 @@ class {{singular.pascalCase()}}LogoutPageRoute extends GoRouteData {
 /// Details
 /// 
 @TypedGoRoute<{{singular.pascalCase()}}DetailsPageRoute>(path: {{singular.pascalCase()}}DetailsPageRoute.path)
-class {{singular.pascalCase()}}DetailsPageRoute extends GoRouteData {
+class {{singular.pascalCase()}}DetailsPageRoute extends GoRouteData with _${{singular.pascalCase()}}DetailsPageRoute {
   const {{singular.pascalCase()}}DetailsPageRoute();
   static const path = '/{{singular.camelCase()}}';
 

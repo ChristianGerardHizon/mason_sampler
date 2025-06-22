@@ -121,14 +121,38 @@ class DynamicGroupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final theme = Theme.of(context);
-    return ListTile(
-      contentPadding: contentPadding,
+
+    return InkWell(
       onTap: onTap,
       onLongPress: onLongPress,
-      leading: leading,
-      title: title,
-      subtitle: value,
-      trailing: trailing,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            if (leading is Widget)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: leading!,
+              ),
+            if (title is Widget) Expanded(child: title!),
+            if (value is Widget) Expanded(flex: 2, child: value!),
+            if (trailing is Widget)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: trailing!,
+              ),
+          ],
+        ),
+      ),
     );
+    // return ListTile(
+    //   contentPadding: contentPadding,
+    //   onTap: onTap,
+    //   onLongPress: onLongPress,
+    //   leading: leading,
+    //   title: title,
+    //   subtitle: value,
+    //   trailing: trailing,
+    // );
   }
 }

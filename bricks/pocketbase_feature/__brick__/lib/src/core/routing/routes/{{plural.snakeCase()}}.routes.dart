@@ -18,7 +18,7 @@ class {{plural.pascalCase()}}BranchData extends StatefulShellBranchData {
 /// List
 ///
 {{^isShellRoute}}@TypedGoRoute<{{plural.pascalCase()}}PageRoute>(path: {{plural.pascalCase()}}PageRoute.path){{/isShellRoute}}
-class {{plural.pascalCase()}}PageRoute extends GoRouteData {
+class {{plural.pascalCase()}}PageRoute extends GoRouteData with _${{plural.pascalCase()}}PageRoute {
   const {{plural.pascalCase()}}PageRoute();
   static const path = '/{{plural.camelCase()}}/list';
 
@@ -32,7 +32,7 @@ class {{plural.pascalCase()}}PageRoute extends GoRouteData {
 /// Form
 ///
 {{^isShellRoute}}@TypedGoRoute<{{singular.pascalCase()}}FormPageRoute>(path: {{singular.pascalCase()}}FormPageRoute.path){{/isShellRoute}}
-class {{singular.pascalCase()}}FormPageRoute extends GoRouteData {
+class {{singular.pascalCase()}}FormPageRoute extends GoRouteData with _${{singular.pascalCase()}}FormPageRoute {
   const {{singular.pascalCase()}}FormPageRoute({this.id});
   static const path = '/{{plural.camelCase()}}/form';
 
@@ -48,7 +48,7 @@ class {{singular.pascalCase()}}FormPageRoute extends GoRouteData {
 /// Details
 /// 
 {{^isShellRoute}}@TypedGoRoute<{{singular.pascalCase()}}PageRoute>(path: {{singular.pascalCase()}}PageRoute.path){{/isShellRoute}}
-class {{singular.pascalCase()}}PageRoute extends GoRouteData {
+class {{singular.pascalCase()}}PageRoute extends GoRouteData with _${{singular.pascalCase()}}PageRoute {
   const {{singular.pascalCase()}}PageRoute(this.id);
   static const path = '/{{plural.camelCase()}}/id/:id';
 
