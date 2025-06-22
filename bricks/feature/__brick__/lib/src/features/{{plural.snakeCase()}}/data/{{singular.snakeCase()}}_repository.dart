@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:mason_sampler/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 // system import
 import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
