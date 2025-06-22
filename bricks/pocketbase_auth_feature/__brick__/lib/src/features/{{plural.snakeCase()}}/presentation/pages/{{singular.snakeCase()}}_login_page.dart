@@ -64,9 +64,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Padding(
-      padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-      child: BasicFormBuilder(
+      body: BasicFormBuilder(
         formKey: formKey,
         isLoading: isLoading.value,
         fields: [
@@ -106,7 +104,6 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
         ],
         onSubmit: (result) => onSave(result),
       ),
-    ),
     );
   }
 }

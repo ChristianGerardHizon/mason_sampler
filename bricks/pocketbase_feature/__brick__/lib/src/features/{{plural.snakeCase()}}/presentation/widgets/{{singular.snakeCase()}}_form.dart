@@ -66,23 +66,20 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
       data: (formState) {
         final {{singular.camelCase()}} = formState.{{singular.camelCase()}};
 
-        return Padding(
-          padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-          child: BasicFormBuilder(
-            formKey: formKey,
-            isLoading: isLoading.value,
-            fields: [
-              BasicFormFieldText(
-                name: {{singular.pascalCase()}}Fields.id,
-                initialValue: {{singular.camelCase()}}?.id,
-                decoration: const InputDecoration(
-                  label: Text('Id'),
-                  border: OutlineInputBorder(),
-                ),
+        return BasicFormBuilder(
+          formKey: formKey,
+          isLoading: isLoading.value,
+          fields: [
+            BasicFormFieldText(
+              name: {{singular.pascalCase()}}Fields.id,
+              initialValue: {{singular.camelCase()}}?.id,
+              decoration: const InputDecoration(
+                label: Text('Id'),
+                border: OutlineInputBorder(),
               ),
-            ],
-            onSubmit: (result) => onSave({{singular.camelCase()}}, result),
-          ),
+            ),
+          ],
+          onSubmit: (result) => onSave({{singular.camelCase()}}, result),
         );
       },
     );
