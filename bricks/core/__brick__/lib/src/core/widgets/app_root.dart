@@ -98,9 +98,7 @@ class AppRoot extends HookConsumerWidget {
                           fontSize: 14,
                         ),
                         hasSelectedLine: true,
-                        isSelected: e.isRoot
-                            ? currentLocation == RootRoute.path
-                            : currentLocation.contains(e.route),
+                        isSelected: currentLocation.contains(e.route),
                         onTap: () => e.onTap?.call(context),
                         title: e.label,
                         icon: e.icon,

@@ -7,8 +7,9 @@ class BasicFormFieldText extends HookWidget {
     required this.name,
     this.initialValue,
     this.validator,
-    this.fieldTransformer,
+    this.valueTransformer,
     this.onChange,
+    this.onSubmitted,
     this.margin = const EdgeInsets.only(bottom: 12),
     this.enabled = true,
     this.decoration = const InputDecoration(),
@@ -23,7 +24,7 @@ class BasicFormFieldText extends HookWidget {
   final String name;
   final String? initialValue;
   final String? Function(String?)? validator;
-  final dynamic Function(String?)? fieldTransformer;
+  final dynamic Function(String?)? valueTransformer;
   final Function(dynamic)? onChange;
   final EdgeInsets margin;
   final bool enabled;
@@ -33,6 +34,7 @@ class BasicFormFieldText extends HookWidget {
   final int? maxLines;
   final Widget Function(BuildContext context, String? value)? builder;
   final bool keepAlive;
+  final void Function(String?)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +46,11 @@ class BasicFormFieldText extends HookWidget {
       decoration: decoration,
       validator: validator,
       obscureText: obscureText,
-      minLines: minLines,
-      maxLines: maxLines,
+      minLines: obscureText ? 1 : minLines,
+      maxLines: obscureText ? 1 : maxLines,
+      onChanged: onChange,
+      valueTransformer: valueTransformer,
+      onSubmitted: onSubmitted,
     );
   }
 }

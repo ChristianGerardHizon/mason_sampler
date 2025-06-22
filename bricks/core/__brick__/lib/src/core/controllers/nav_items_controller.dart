@@ -12,7 +12,6 @@ class NavItemsController extends _$NavItemsController {
   FutureOr<List<CustomNavigationBarItem>> build() {
     return [
       CustomNavigationBarItem(
-        isRoot: true,
         route: RootRoute.path,
         icon: Icon(MIcons.homeOutline),
         selectedIcon: Icon(MIcons.home),

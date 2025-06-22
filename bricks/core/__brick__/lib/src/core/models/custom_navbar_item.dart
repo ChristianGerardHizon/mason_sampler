@@ -4,7 +4,6 @@ class CustomNavigationBarItem extends BottomNavigationBarItem {
   final Function(BuildContext context)? onTap;
   final String route;
   final Icon? selectedIcon;
-  final bool isRoot;
   final bool isMobile;
 
   CustomNavigationBarItem({
@@ -16,7 +15,6 @@ class CustomNavigationBarItem extends BottomNavigationBarItem {
     super.tooltip,
     this.onTap,
     this.selectedIcon,
-    this.isRoot = false,
     this.isMobile = true,
   });
 

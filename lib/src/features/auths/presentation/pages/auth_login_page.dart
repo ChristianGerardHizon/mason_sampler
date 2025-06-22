@@ -24,6 +24,7 @@ class AuthLoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isLoading = useState(false);
+    final obscureText = useState(true);
 
     ref.listen(authControllerProvider, (previous, next) {
       if (next.valueOrNull is AuthData) {
@@ -92,10 +93,14 @@ class AuthLoginPage extends HookConsumerWidget {
           BasicFormFieldText(
             name: AuthFields.password,
             initialValue: email,
-            obscureText: true,
-            decoration: const InputDecoration(
-              label: Text('Password'),
-              border: OutlineInputBorder(),
+            obscureText: obscureText.value,
+            decoration: InputDecoration(
+              label: const Text('Password'),
+              border: const OutlineInputBorder(),
+              suffix: IconButton(
+                icon: obscureText.value ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                onPressed: () => obscureText.value = !obscureText.value,
+              )
             ),
           ),
         ],
