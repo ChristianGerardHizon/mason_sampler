@@ -39,7 +39,7 @@ class AppRoot extends HookConsumerWidget {
 
     return Scaffold(
       key: scaffoldKey,
-      drawer: MobileDrawer(rootContext: context),
+      drawer: MobileDrawer(rootContext: context, routerState: routerState),
       body: Builder(
         builder: (context) {
           /// has error

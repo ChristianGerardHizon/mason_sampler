@@ -3,10 +3,10 @@ import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 // system imports
 import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/controllers/scaffold_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/models/custom_navbar_item.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/type_defs.dart';
 
-class MobileBottomNav extends StatelessWidget {
+class MobileBottomNav extends HookConsumerWidget {
   final List<CustomNavigationBarItem> list;
   final GoRouterState state;
   final int index;
@@ -19,7 +19,7 @@ class MobileBottomNav extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     ///
@@ -31,8 +31,13 @@ class MobileBottomNav extends StatelessWidget {
       ...list,
       CustomNavigationBarItem(
         route: RootRoute.path,
-        icon: Icon(Icons.more),
+        icon: Icon(MIcons.dotsHorizontalCircleOutline),
         label: 'More',
+        onTap: (context) {
+          final scaffold = ref.read(scaffoldControllerProvider).currentState;
+          scaffold?.openDrawer();
+        },
+
       ),
     ];
 

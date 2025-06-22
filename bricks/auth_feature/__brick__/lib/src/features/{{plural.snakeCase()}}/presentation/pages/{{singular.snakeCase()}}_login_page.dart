@@ -22,6 +22,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormBuilderState>());
     final isLoading = useState(false);
+    final obscureText = useState(true);
 
     ref.listen(authControllerProvider, (previous, next) {
       if (next.valueOrNull is AuthData) {
@@ -91,10 +92,11 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
           BasicFormFieldText(
             name: {{singular.pascalCase()}}Fields.password,
             initialValue: email,
-            obscureText: true,
+            obscureText: obscureText.value,
             decoration: const InputDecoration(
               label: Text('Password'),
               border: OutlineInputBorder(),
+              suffixIcon: obscureText.value ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
             ),
           ),
         ],

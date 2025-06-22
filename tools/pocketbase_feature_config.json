@@ -1,7 +1,7 @@
 {
     "packageName":"mason_sampler",
-    "singular":"sales transaction",
-    "plural":"sales transactions",
+    "singular":"user",
+    "plural":"users",
     "isShellRoute": true,
     "addToShellRoute": true
 }

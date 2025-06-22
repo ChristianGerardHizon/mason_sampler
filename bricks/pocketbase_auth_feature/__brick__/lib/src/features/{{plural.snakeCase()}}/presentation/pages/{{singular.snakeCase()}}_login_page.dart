@@ -97,7 +97,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
             decoration: InputDecoration(
               label: const Text('Password'),
               border: const OutlineInputBorder(),
-              suffix: IconButton(
+              suffixIcon: IconButton(
                 icon: obscureText.value ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
                 onPressed: () => obscureText.value = !obscureText.value,
               )
