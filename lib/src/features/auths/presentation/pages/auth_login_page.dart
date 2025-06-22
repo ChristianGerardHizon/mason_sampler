@@ -4,17 +4,19 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
-import 'package:{{packageName.snakeCase()}}/src/core/models/fields/auth_fields.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_builder.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_field_text.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}_data.dart';
+import 'package:mason_sampler/src/core/models/failure.dart';
+import 'package:mason_sampler/src/core/models/fields/auth_fields.dart';
+import 'package:mason_sampler/src/core/routing/router.dart';
+import 'package:mason_sampler/src/core/widgets/basic_form_fields/basic_form_builder.dart';
+import 'package:mason_sampler/src/core/widgets/basic_form_fields/basic_form_field_text.dart';
+import 'package:mason_sampler/src/core/widgets/basic_form_fields/basic_form_field_select.dart';
+import 'package:mason_sampler/src/core/widgets/modals/app_snackbar.dart';
+import 'package:mason_sampler/src/features/auths/data/auth_repository.dart';
+import 'package:mason_sampler/src/features/auths/presentation/controllers/auth_controller.dart';
+import 'package:mason_sampler/src/features/auths/domain/auth_data.dart';
 
-class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
-  const {{singular.pascalCase()}}LoginPage({super.key, this.email});
+class AuthLoginPage extends HookConsumerWidget {
+  const AuthLoginPage({super.key, this.email});
 
   final String? email;
 
@@ -42,12 +44,11 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       
       isLoading.value = true;
 
-      final repository = ref.read({{singular.camelCase()}}RepositoryProvider);
-      final value = formResult.values;
+      final repository = ref.read(authRepositoryProvider);
 
       final task = repository
           .login(value)
-          .flatMap(ref.read({{singular.camelCase()}}ControllerProvider.notifier).setUser);
+          .flatMap(ref.read(authControllerProvider.notifier).setUser);
 
       final result = await task.run();
 
@@ -64,16 +65,16 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       ),
       body: Padding(
       padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-      child: DynamicFormBuilder(
+      child: BasicFormBuilder(
         formKey: formKey,
         isLoading: isLoading.value,
         fields: [
-          BasicFormFieldText(
-            initialValue: '{{childPlural.snakeCase()}}',
-            name: {{singular.pascalCase()}}Fields.type,
+          BasicFormFieldSelect<String>(
+            initialValue: 'users',
+            name: AuthFields.type,
             options: [
-              SelectOption(value: '{{childPlural.snakeCase()}}', display: '{{childPlural.pascalCase()}}'),
-              SelectOption(value: '{{parentPlural.snakeCase()}}', display: '{{parentPlural.pascalCase()}}'),
+              SelectOption(value: 'users', label: 'Users'),
+              SelectOption(value: 'admins', label: 'Admins'),
             ],
             decoration: const InputDecoration(
               label: Text('Type'),
@@ -81,7 +82,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
             ),
           ),
           BasicFormFieldText(
-            name: {{singular.pascalCase()}}Fields.identity,
+            name: AuthFields.identity,
             initialValue: email,
             decoration: const InputDecoration(
               label: Text('Email'),
@@ -89,7 +90,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
             ),
           ),
           BasicFormFieldText(
-            name: {{singular.pascalCase()}}Fields.password,
+            name: AuthFields.password,
             initialValue: email,
             obscureText: true,
             decoration: const InputDecoration(

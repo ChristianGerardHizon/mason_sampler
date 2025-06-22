@@ -5,16 +5,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
-import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_form_result.dart';
+import 'package:http/http.dart' as http;
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}_fields.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_field.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_form_field_builder.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_builder.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_field_text.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_form_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_table_controller.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
 
 class {{singular.pascalCase()}}Form extends HookConsumerWidget {
   const {{singular.pascalCase()}}Form({super.key, this.id});
@@ -30,12 +31,18 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
     ///
     /// Submit
     ///
-    void onSave({{singular.pascalCase()}}? {{singular.camelCase()}}, DynamicFormResult formResult) async {
+    void onSave({{singular.pascalCase()}}? {{singular.camelCase()}}, Map<String,dynamic>? values) async {
+
+      if (values == null) {
+        AppSnackBar.rootFailure(PresentationFailure('Invalid form'));
+        return;
+      }
+
       isLoading.value = true;
 
       final repository = ref.read({{singular.camelCase()}}RepositoryProvider);
-      final value = formResult.values;
-      final files = formResult.files;
+      final value = values;
+      final files = <http.MultipartFile>[];
 
       final task = ({{singular.camelCase()}} == null
           ? repository.create(value, files: files)
@@ -61,11 +68,11 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
 
         return Padding(
           padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-          child: DynamicFormBuilder(
+          child: BasicFormBuilder(
             formKey: formKey,
             isLoading: isLoading.value,
             fields: [
-              DynamicTextField(
+              BasicFormFieldText(
                 name: {{singular.pascalCase()}}Fields.id,
                 initialValue: {{singular.camelCase()}}?.id,
                 decoration: const InputDecoration(

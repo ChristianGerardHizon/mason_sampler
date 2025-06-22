@@ -4,16 +4,16 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // system imports
-import 'package:{{packageName.snakeCase()}}/src/core/models/dynamic_form_result.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/models/fields/{{singular.snakeCase()}}_fields.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/failure.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/models/fields/auth_fields.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/routing/router.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_field.dart';
-import 'package:{{packageName.snakeCase()}}/src/core/widgets/dynamic_form_fields/dynamic_form_field_builder.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_builder.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_field_text.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/widgets/basic_form_fields/basic_form_field_select.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/modals/app_snackbar.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/data/{{singular.snakeCase()}}_repository.dart';
 import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/presentation/controllers/{{singular.snakeCase()}}_controller.dart';
-import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/auth_data.dart';
+import 'package:{{packageName.snakeCase()}}/src/features/{{plural.snakeCase()}}/domain/{{singular.snakeCase()}}_data.dart';
 
 class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
   const {{singular.pascalCase()}}LoginPage({super.key, this.email});
@@ -35,11 +35,16 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
     ///
     /// Submit
     ///
-    void onSave(DynamicFormResult formResult) async {
+    void onSave(Map<String, dynamic>? value) async {
+
+      if (value == null) {
+        AppSnackBar.rootFailure(PresentationFailure('Invalid form'));
+        return;
+      }
+      
       isLoading.value = true;
 
       final repository = ref.read({{singular.camelCase()}}RepositoryProvider);
-      final value = formResult.values;
 
       final task = repository
           .login(value)
@@ -60,23 +65,23 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       ),
       body: Padding(
       padding: EdgeInsets.only(top: 14, left: 20, right: 20),
-      child: DynamicFormBuilder(
+      child: BasicFormBuilder(
         formKey: formKey,
         isLoading: isLoading.value,
         fields: [
-          DynamicSelectField(
+          BasicFormFieldSelect<String>(
             initialValue: '{{childPlural.snakeCase()}}',
             name: {{singular.pascalCase()}}Fields.type,
             options: [
-              SelectOption(value: '{{childPlural.snakeCase()}}', display: '{{childPlural.pascalCase()}}'),
-              SelectOption(value: '{{parentPlural.snakeCase()}}', display: '{{parentPlural.pascalCase()}}'),
+              SelectOption(value: '{{childPlural.snakeCase()}}', label: '{{childPlural.pascalCase()}}'),
+              SelectOption(value: '{{parentPlural.snakeCase()}}', label: '{{parentPlural.pascalCase()}}'),
             ],
             decoration: const InputDecoration(
               label: Text('Type'),
               border: OutlineInputBorder(),
             ),
           ),
-          DynamicTextField(
+          BasicFormFieldText(
             name: {{singular.pascalCase()}}Fields.identity,
             initialValue: email,
             decoration: const InputDecoration(
@@ -84,9 +89,10 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
               border: OutlineInputBorder(),
             ),
           ),
-          DynamicPasswordField(
+          BasicFormFieldText(
             name: {{singular.pascalCase()}}Fields.password,
             initialValue: email,
+            obscureText: true,
             decoration: const InputDecoration(
               label: Text('Password'),
               border: OutlineInputBorder(),
