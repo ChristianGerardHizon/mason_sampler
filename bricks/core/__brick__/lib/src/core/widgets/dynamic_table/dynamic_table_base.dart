@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_table_view/material_table_view.dart';
 import 'package:responsive_builder/responsive_builder.dart'
@@ -98,13 +100,22 @@ class DynamicTableBase extends HookConsumerWidget {
       );
     }
 
+    final columnWidths = useState<List<double>>(
+      tableColumns.map((e) => e.width ?? e.minResizeWidth ?? 100.0).toList(),
+    );
+    final resizingColumn = useState<int?>(null);
+
     return TableView.builder(
-      rowCount: itemCount,
-      rowHeight: tableRowHeight,
+      headerBuilder: (context, contentBuilder) {
+        return contentBuilder(
+          context,
+          (context, index) => tableColumns[index].builder(context, index),
+        );
+      },
       columns: tableColumns
-          .map(
-            (col) => TableColumn(
-              width: col.width,
+          .mapWithIndex(
+            (col, i) => TableColumn(
+              width: columnWidths.value[i],
               flex: col.flex,
               maxResizeWidth: col.maxResizeWidth,
               minResizeWidth: col.minResizeWidth,
@@ -114,40 +125,69 @@ class DynamicTableBase extends HookConsumerWidget {
             ),
           )
           .toList(),
-      rowBuilder: (context, rowIndex, builder) {
+      rowCount: itemCount,
+      rowHeight: tableRowHeight,
+      rowBuilder: (context, row, contentBuilder) {
         return InkWell(
-          onTap: () => onTableRowTap?.call(rowIndex),
-          child: builder(context, (_, columnIndex) {
-            if (columnIndex == 0 && showCheckbox) {
-              return Checkbox(
-                value: selectedRows.contains(rowIndex),
-                onChanged: (_) => notifier.toggleRow(rowIndex),
-              );
-            }
+          onTap: () => onTableRowTap?.call(row),
+          child: contentBuilder(context, (context, column) {
+            final item = tableColumns[column];
 
-            final widget = tableRowBuilder(
-              context,
-              _DynamicTableBuilderValue(
-                row: rowIndex,
-                column: columnIndex,
-                isSelected: selectedRows.contains(rowIndex),
-              ),
-              showCheckbox,
+            return Row(
+              children: [
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      if (column == 0 && showCheckbox) {
+                        return Checkbox(
+                          value: selectedRows.contains(row),
+                          onChanged: (_) => notifier.toggleRow(row),
+                        );
+                      }
+
+                      final widget = tableRowBuilder(
+                        context,
+                        _DynamicTableBuilderValue(
+                          row: row,
+                          column: column,
+                          isSelected: selectedRows.contains(row),
+                        ),
+                        showCheckbox,
+                      );
+
+                      return widget ?? const SizedBox();
+                    },
+                  ),
+                ),
+                if (column < columnWidths.value.length - 1 &&
+                    item.width == null)
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onHorizontalDragStart: (_) {
+                      resizingColumn.value = column;
+                    },
+                    onHorizontalDragUpdate: (details) {
+                      final updated = [...columnWidths.value];
+                      updated[column] = (updated[column] + details.delta.dx)
+                          .clamp(
+                            item.minResizeWidth ?? 100.0,
+                            item.maxResizeWidth ?? 400.0,
+                          ); // Prevent too small or large
+                      columnWidths.value = updated;
+                    },
+                    onHorizontalDragEnd: (_) {
+                      resizingColumn.value = null;
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.resizeColumn,
+                      child: VerticalDivider(),
+                    ),
+                  ),
+              ],
             );
-
-            return widget ?? const SizedBox();
           }),
         );
       },
-      headerBuilder: (context, contentBuilder) {
-        return contentBuilder(
-          context,
-          (context, index) => tableColumns[index].builder(context, index),
-        );
-      },
-      physics: physics,
-      shrinkWrapHorizontal: shrinkWrapHorizontal,
-      shrinkWrapVertical: shrinkWrapVertical,
     );
   }
 }

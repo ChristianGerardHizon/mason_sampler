@@ -8,7 +8,7 @@ class DynamicTableBaseColumn with DynamicTableBaseColumnMappable {
   final String? key;
 
   /// Width of a column in logical pixels.
-  final double width;
+  final double? width;
 
   /// Priority of a column to be frozen.
   final int freezePriority;
@@ -32,7 +32,7 @@ class DynamicTableBaseColumn with DynamicTableBaseColumnMappable {
   final Widget Function(BuildContext context, int row) builder;
 
   const DynamicTableBaseColumn({
-    required this.width,
+    this.width,
     this.key,
     this.freezePriority = 0,
     this.sticky = false,
@@ -42,13 +42,13 @@ class DynamicTableBaseColumn with DynamicTableBaseColumnMappable {
     this.maxResizeWidth,
     required this.builder,
   }) : assert(
-          freezePriority != 0 || !sticky,
-          'A column can only be sticky if it is freezable',
-        );
+         freezePriority != 0 || !sticky,
+         'A column can only be sticky if it is freezable',
+       );
 
   /// Factory constructor for sticky columns with rule enforcement.
   factory DynamicTableBaseColumn.sticky({
-    required double width,
+    double? width,
     String? key,
     required int freezePriority,
     int flex = 0,

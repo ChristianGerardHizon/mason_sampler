@@ -12,7 +12,7 @@ class DynamicTableColumn<T> with DynamicTableColumnMappable {
   final TextStyle? style;
 
   /// Width of a column in logical pixels.
-  final double width;
+  final double? width;
 
   /// Flex grow of column.
   final int flex;
@@ -27,12 +27,8 @@ class DynamicTableColumn<T> with DynamicTableColumnMappable {
   final double? maxResizeWidth;
 
   /// Optional cell builder.
-  final Widget Function(
-    BuildContext context,
-    T data,
-    int row,
-    int column,
-  )? builder;
+  final Widget Function(BuildContext context, T data, int row, int column)?
+  builder;
 
   // Private internal state
   final bool _isSticky;
@@ -51,20 +47,20 @@ class DynamicTableColumn<T> with DynamicTableColumnMappable {
     this.alignment,
     this.padding,
     this.style,
-    this.width = 100,
+    this.width,
     this.flex = 0,
     this.translation = 0,
     this.minResizeWidth,
     this.maxResizeWidth,
     this.builder,
-  })  : _isSticky = false,
-        _freezePriority = null;
+  }) : _isSticky = false,
+       _freezePriority = null;
 
   /// Named constructor for sticky columns
   factory DynamicTableColumn.sticky({
     required String header,
     required int freezePriority,
-    double width = 100,
+    double? width,
     int flex = 0,
     double translation = 0,
     double? minResizeWidth,
@@ -113,6 +109,6 @@ class DynamicTableColumn<T> with DynamicTableColumnMappable {
     this.minResizeWidth,
     this.maxResizeWidth,
     this.builder,
-  })  : _isSticky = isSticky,
-        _freezePriority = freezePriority;
+  }) : _isSticky = isSticky,
+       _freezePriority = freezePriority;
 }
