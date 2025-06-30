@@ -15,7 +15,7 @@ class BasicFormFieldTypeAhead<T> extends HookWidget {
   final Duration debounceDuration;
   final InputDecoration decoration;
   final String name;
-  final EdgeInsets? margin;
+  final EdgeInsets margin;
   final bool enabled;
   final bool keepAlive;
 
@@ -32,7 +32,7 @@ class BasicFormFieldTypeAhead<T> extends HookWidget {
     required this.selectionToString,
     this.onChange,
     this.debounceDuration = const Duration(milliseconds: 200),
-    this.margin,
+    this.margin = const EdgeInsets.only(top: 14),
     this.enabled = true,
     this.keepAlive = false,
   });
@@ -40,20 +40,26 @@ class BasicFormFieldTypeAhead<T> extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useAutomaticKeepAlive(wantKeepAlive: keepAlive);
-    return FormBuilderTypeAhead<T>(
-      key: formFieldKey,
-      name: name,
-      initialValue: initialValue,
-      hideKeyboardOnDrag: true,
-      decoration: decoration,
-      enabled: enabled,
-      validator: validator,
-      itemBuilder: itemBuilder,
-      suggestionsCallback: onSearch,
-      selectionToTextTransformer: selectionToString,
-      debounceDuration: debounceDuration,
-      valueTransformer: valueTransformer,
-      onChanged: onChange,
+    return Padding(
+      padding: margin,
+      child: FormBuilderTypeAhead<T>(
+        key: formFieldKey,
+        name: name,
+        initialValue: initialValue,
+        hideKeyboardOnDrag: true,
+        decoration: decoration,
+        enabled: enabled,
+        validator: validator,
+        itemBuilder: itemBuilder,
+        suggestionsCallback: onSearch,
+        selectionToTextTransformer: selectionToString,
+        debounceDuration: debounceDuration,
+        valueTransformer: valueTransformer,
+        onChanged: onChange,
+        hideOnUnfocus: true,
+        emptyBuilder: (context) =>
+            ListTile(title: const Text('No results found')),
+      ),
     );
   }
 }

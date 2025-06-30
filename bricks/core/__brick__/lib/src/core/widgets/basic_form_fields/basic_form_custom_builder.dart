@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:{{packageName.snakeCase()}}/src/core/models/pb_record.dart';
+import 'package:{{packageName.snakeCase()}}/src/core/extensions/map_extension.dart';
 import 'package:{{packageName.snakeCase()}}/src/core/widgets/loading_filled_button.dart';
 
 class BasicFormCustomBuilder extends HookConsumerWidget {
@@ -30,18 +32,33 @@ class BasicFormCustomBuilder extends HookConsumerWidget {
     this.padding = const EdgeInsets.only(top: 14, left: 20, right: 20),
   });
 
+  Map<String, dynamic> parse(Map<String, dynamic> map) {
+    return map.transform((p0) {
+      if (p0 is DateTime) {
+        return p0.toUtc().toIso8601String();
+      }
+      if (p0 is PbRecord) {
+        return p0.toJson();
+      }
+      if (p0 is Enum) {
+        return p0.name;
+      }
+      return p0;
+    });
+  }
+
   onFormSubmit(GlobalKey<FormBuilderState>? _formKey) async {
     final form = _formKey?.currentState;
     if (form?.saveAndValidate() ?? false) {
-      final current = form?.instantValue ?? {};
+      final current = parse(form?.instantValue ?? {});
       onSubmit(current);
       return;
     }
   }
 
-  onFormChange(GlobalKey<FormBuilderState>? _formKey) async {
+  onFormChange(GlobalKey<FormBuilderState>? _formKe) async {
     if (onChange != null) {
-      final current = _formKey?.currentState?.instantValue ?? {};
+      final current = parse(_formKe?.currentState?.instantValue ?? {});
       onChange!(current);
     }
   }

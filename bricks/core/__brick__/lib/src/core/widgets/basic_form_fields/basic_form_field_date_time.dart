@@ -16,7 +16,7 @@ class BasicFormFieldDateTime extends HookWidget {
   final String? Function(DateTime?)? selectionToString;
   final Function(DateTime)? onChange;
   final Duration debounceDuration;
-  final EdgeInsets? margin;
+  final EdgeInsets margin;
   final bool enabled;
   final dynamic Function(DateTime?)? valueTransformer;
   final bool keepAlive;
@@ -32,7 +32,7 @@ class BasicFormFieldDateTime extends HookWidget {
     this.selectionToString,
     this.onChange,
     this.debounceDuration = const Duration(milliseconds: 300),
-    this.margin,
+    this.margin = const EdgeInsets.only(top: 14),
     this.enabled = true,
     this.firstDate,
     this.lastDate,
@@ -44,88 +44,96 @@ class BasicFormFieldDateTime extends HookWidget {
   Widget build(BuildContext context) {
     useAutomaticKeepAlive(wantKeepAlive: keepAlive);
 
-    return FormBuilderField<DateTime?>(
-      key: formFieldKey,
-      enabled: enabled,
-      name: name,
-      validator: validator,
-      initialValue: initialValue,
-      valueTransformer: valueTransformer,
-      builder: (FormFieldState<DateTime?> state) {
-        return InputDecorator(
-          decoration: decoration.copyWith(
-            errorText: state.errorText,
-            enabled: FormBuilder.of(context)?.enabled,
-            suffixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (state.value != null)
+    return Padding(
+      padding: margin,
+      child: FormBuilderField<DateTime?>(
+        key: formFieldKey,
+        enabled: enabled,
+        name: name,
+        validator: validator,
+        initialValue: initialValue,
+        valueTransformer: valueTransformer,
+        builder: (FormFieldState<DateTime?> state) {
+          return InputDecorator(
+            decoration: decoration.copyWith(
+              errorText: state.errorText,
+              enabled: FormBuilder.of(context)?.enabled,
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (state.value != null)
+                    IconButton(
+                      tooltip: 'Clear date & time',
+                      icon: const Icon(Icons.clear),
+                      onPressed: () => state.didChange(null),
+                    ),
                   IconButton(
-                    tooltip: 'Clear date & time',
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => state.didChange(null),
+                    tooltip: 'Pick date',
+                    icon: const Icon(Icons.calendar_today),
+                    onPressed: () async {
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: state.value ?? DateTime.now(),
+                        firstDate: firstDate ?? DateTime(1900),
+                        lastDate: lastDate ?? DateTime(2100),
+                      );
+                      if (pickedDate != null) {
+                        final old = state.value ?? DateTime.now();
+                        final newDateTime = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          old.hour,
+                          old.minute,
+                        );
+                        state.didChange(newDateTime);
+                        if (onChange != null) {
+                          onChange!(newDateTime);
+                        }
+                      }
+                    },
                   ),
-                IconButton(
-                  tooltip: 'Pick date',
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    final pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: state.value ?? DateTime.now(),
-                      firstDate: firstDate ?? DateTime(1900),
-                      lastDate: lastDate ?? DateTime(2100),
-                    );
-                    if (pickedDate != null) {
-                      final old = state.value ?? DateTime.now();
-                      final newDateTime = DateTime(
-                        pickedDate.year,
-                        pickedDate.month,
-                        pickedDate.day,
-                        old.hour,
-                        old.minute,
+                  IconButton(
+                    tooltip: 'Pick time',
+                    icon: const Icon(Icons.access_time),
+                    onPressed: () async {
+                      final current = state.value ?? DateTime.now();
+                      final initialTime =
+                          defaultTime ?? TimeOfDay.fromDateTime(current);
+                      final pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: initialTime,
+                        initialEntryMode: TimePickerEntryMode.input,
                       );
-                      state.didChange(newDateTime);
-                    }
-                  },
-                ),
-                IconButton(
-                  tooltip: 'Pick time',
-                  icon: const Icon(Icons.access_time),
-                  onPressed: () async {
-                    final current = state.value ?? DateTime.now();
-                    final initialTime =
-                        defaultTime ?? TimeOfDay.fromDateTime(current);
-                    final pickedTime = await showTimePicker(
-                      context: context,
-                      initialTime: initialTime,
-                      initialEntryMode: TimePickerEntryMode.inputOnly,
-                    );
-                    if (pickedTime != null) {
-                      final datePart = state.value ?? DateTime.now();
-                      final newDateTime = DateTime(
-                        datePart.year,
-                        datePart.month,
-                        datePart.day,
-                        pickedTime.hour,
-                        pickedTime.minute,
-                      );
-                      state.didChange(newDateTime);
-                    }
-                  },
-                ),
-              ],
+                      if (pickedTime != null) {
+                        final datePart = state.value ?? DateTime.now();
+                        final newDateTime = DateTime(
+                          datePart.year,
+                          datePart.month,
+                          datePart.day,
+                          pickedTime.hour,
+                          pickedTime.minute,
+                        );
+                        state.didChange(newDateTime);
+                        if (onChange != null) {
+                          onChange!(newDateTime);
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          isEmpty: state.value == null,
-          child: Text(
-            state.value != null
-                ? (format?.format(state.value!) ??
-                      DateFormat.yMMMd().add_jm().format(state.value!))
-                : '',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        );
-      },
+            child: Text(
+              state.value != null
+                  ? (format?.format(state.value!) ??
+                        DateFormat.yMMMd().add_jm().format(state.value!))
+                  : '',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          );
+        },
+      ),
     );
   }
 }

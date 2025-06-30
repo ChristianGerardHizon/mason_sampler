@@ -2,37 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class BasicFormFieldText extends HookWidget {
-  const BasicFormFieldText({
+class BasicFormFieldCheckbox extends HookWidget {
+  const BasicFormFieldCheckbox({
     required this.name,
+    required this.title,
     this.initialValue,
     this.validator,
-    this.fieldTransformer,
+    this.valueTransformer,
     this.onChange,
     this.margin = const EdgeInsets.only(top: 14),
     this.enabled = true,
     this.decoration = const InputDecoration(),
-    this.obscureText = false,
-    this.builder,
     this.keepAlive = false,
+    this.controlAffinity = ListTileControlAffinity.leading,
     super.key,
-    this.minLines,
-    this.maxLines,
   });
 
   final String name;
-  final String? initialValue;
-  final String? Function(String?)? validator;
-  final dynamic Function(String?)? fieldTransformer;
-  final Function(dynamic)? onChange;
+  final bool? initialValue;
+  final String? Function(dynamic)? validator;
+  final dynamic Function(bool?)? valueTransformer;
+  final Function(bool?)? onChange;
   final EdgeInsets margin;
   final bool enabled;
   final InputDecoration decoration;
-  final bool obscureText;
-  final int? minLines;
-  final int? maxLines;
-  final Widget Function(BuildContext context, String? value)? builder;
   final bool keepAlive;
+  final Widget title;
+  final ListTileControlAffinity controlAffinity;
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +36,15 @@ class BasicFormFieldText extends HookWidget {
 
     return Padding(
       padding: margin,
-      child: FormBuilderTextField(
+      child: FormBuilderCheckbox(
         name: name,
+        title: title,
         initialValue: initialValue,
         decoration: decoration,
         validator: validator,
-        obscureText: obscureText,
-        minLines: obscureText ? 1 : minLines,
-        maxLines: obscureText ? 1 : maxLines,
         onChanged: onChange,
+        controlAffinity: controlAffinity,
+        valueTransformer: valueTransformer,
       ),
     );
   }
