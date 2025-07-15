@@ -12,12 +12,14 @@ class MobileBottomNav extends HookConsumerWidget {
   final List<CustomNavigationBarItem> list;
   final GoRouterState state;
   final int index;
+  final int maxItems;
 
   const MobileBottomNav({
     super.key,
     required this.list,
     required this.index,
     required this.state,
+    this.maxItems = 3,
   });
 
   @override
@@ -27,10 +29,9 @@ class MobileBottomNav extends HookConsumerWidget {
     ///
     /// routes to show in the bottom nav
     ///
-    final routes = <String>[RootRoute.path];
 
     final combinedList = [
-      ...list,
+      ...list.take(maxItems),
       CustomNavigationBarItem(
         route: RootRoute.path,
         icon: Icon(MIcons.dotsHorizontalCircleOutline),
@@ -39,13 +40,12 @@ class MobileBottomNav extends HookConsumerWidget {
           final scaffold = ref.read(scaffoldControllerProvider).currentState;
           scaffold?.openDrawer();
         },
-
       ),
     ];
 
     final finalList = combinedList
         .mapWithIndex((item, index) {
-          if (routes.contains(item.route)) return item;
+          if (item.isMobile) return item;
           return null;
         })
         .whereType<CustomNavigationBarItem>()
@@ -56,7 +56,7 @@ class MobileBottomNav extends HookConsumerWidget {
     ///
     bool shouldShowBottomNav(String? path) {
       if (path == null) return false;
-      return routes.contains(path);
+      return list.any((item) => item.route == path);
     }
 
     ///
@@ -74,7 +74,13 @@ class MobileBottomNav extends HookConsumerWidget {
       List<CustomNavigationBarItem> list,
       String? path,
     ) {
-      return list.indexWhere((item) => item.route == path);
+      try {
+        final value = combinedList.indexWhere((item) => item.route == path);
+        if (value == -1) return combinedList.length - 1;
+        return value;
+      } catch (e) {
+        return combinedList.length - 1;
+      }
     }
 
     ///
