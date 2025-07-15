@@ -90,6 +90,15 @@ sealed class Failure with FailureMappable {
   }
 }
 
+@MappableClass()
+class FormFailure extends Failure with FormFailureMappable {
+  const FormFailure([
+    dynamic message,
+    StackTrace? stackTrace,
+    String? identifier,
+  ]) : super(message, stackTrace, identifier);
+}
+
 {{#hasPocketbase}}
 @MappableClass()
 class PocketbaseFailure extends Failure with PocketbaseFailureMappable {
