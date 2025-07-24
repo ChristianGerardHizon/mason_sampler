@@ -75,61 +75,54 @@ class BasicFormBuilder extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final canPop = useState<bool>(false);
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 800),
-        child: FormBuilder(
-          canPop: canPop.value,
-          onPopInvokedWithResult: (didPop, result) async {
-            if (didPop == true) return;
-            final isDirty = formKey.currentState?.isDirty ?? false;
-            if (isDirty && confirmOnPop == true) {
-              final result = await ConfirmModal.taskResult(
-                context,
-                confirm: 'Discard',
-                title: 'Unsaved Changes',
-                message: 'Are you sure you want to discard changes?',
-                cancel: 'Cancel',
-              ).run();
+    return FormBuilder(
+      canPop: canPop.value,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop == true) return;
+        final isDirty = formKey.currentState?.isDirty ?? false;
+        if (isDirty && confirmOnPop == true) {
+          final result = await ConfirmModal.taskResult(
+            context,
+            confirm: 'Discard',
+            title: 'Unsaved Changes',
+            message: 'Are you sure you want to discard changes?',
+            cancel: 'Cancel',
+          ).run();
 
-              if (result.isLeft()) return;
-            }
+          if (result.isLeft()) return;
+        }
 
-            canPop.value = true;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.pop();
-            });
-          },
-          key: formKey,
-          enabled: !isLoading,
-          initialValue: initialValues,
-          autovalidateMode: validateMode,
-          onChanged: () => onFormChange(formKey),
-          child: ListView(
-            padding: padding,
-            addAutomaticKeepAlives: addAutomaticKeepAlives,
-            children: [
-              ///
-              /// Widgets
-              ///
-              ...fields,
+        canPop.value = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.pop();
+        });
+      },
+      key: formKey,
+      enabled: !isLoading,
+      initialValue: initialValues,
+      autovalidateMode: validateMode,
+      onChanged: () => onFormChange(formKey),
+      child: Padding(
+        padding: padding,
+        child: Column(
+          children: [
+            ///
+            /// Widgets
+            ///
+            ...fields,
 
-              ///
-              /// Save Button
-              ///
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 0,
-                  vertical: 40,
-                ),
-                child: LoadingFilledButton(
-                  isLoading: isLoading,
-                  child: Text(buttonText),
-                  onPressed: () => onFormSubmit(formKey),
-                ),
+            ///
+            /// Save Button
+            ///
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 40),
+              child: LoadingFilledButton(
+                isLoading: isLoading,
+                child: Text(buttonText),
+                onPressed: () => onFormSubmit(formKey),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
