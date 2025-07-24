@@ -63,7 +63,7 @@ class {{singular.pascalCase()}}LoginPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: DynamicFormBuilder(
+      body: BasicFormBuilder(
         formKey: formKey,
         isLoading: isLoading.value,
         fields: [
