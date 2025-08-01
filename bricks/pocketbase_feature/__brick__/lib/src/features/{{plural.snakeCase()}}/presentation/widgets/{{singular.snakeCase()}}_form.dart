@@ -68,7 +68,7 @@ class {{singular.pascalCase()}}Form extends HookConsumerWidget {
 
         return BasicFormBuilder(
           formKey: formKey,
-          isLoading: isLoading.value,
+          enabled: !isLoading.value,
           fields: [
             BasicFormFieldText(
               name: {{singular.pascalCase()}}Fields.id,

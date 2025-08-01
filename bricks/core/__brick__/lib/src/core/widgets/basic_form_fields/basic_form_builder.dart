@@ -32,13 +32,14 @@ class BasicFormBuilder extends HookConsumerWidget {
   final List<Widget> fields;
   final void Function(Map<String, dynamic>? result) onSubmit;
   final void Function(Map<String, dynamic> value)? onChange;
-  final bool isLoading;
+  final bool enabled;
   final AutovalidateMode? validateMode;
   final String buttonText;
   final Map<String, dynamic> initialValues;
   final bool addAutomaticKeepAlives;
   final EdgeInsets padding;
   final bool? confirmOnPop;
+  final bool isLoading;
 
   const BasicFormBuilder({
     this.confirmOnPop = true,
@@ -46,8 +47,9 @@ class BasicFormBuilder extends HookConsumerWidget {
     required this.formKey,
     required this.fields,
     required this.onSubmit,
-    this.onChange,
     this.isLoading = false,
+    this.onChange,
+    this.enabled = true,
     this.validateMode,
     this.buttonText = 'Submit',
     this.initialValues = const {},
@@ -98,13 +100,15 @@ class BasicFormBuilder extends HookConsumerWidget {
         });
       },
       key: formKey,
-      enabled: !isLoading,
+      enabled: enabled,
       initialValue: initialValues,
       autovalidateMode: validateMode,
       onChanged: () => onFormChange(formKey),
       child: Padding(
         padding: padding,
         child: Column(
+          // padding: padding,
+          // addAutomaticKeepAlives: addAutomaticKeepAlives,
           children: [
             ///
             /// Widgets

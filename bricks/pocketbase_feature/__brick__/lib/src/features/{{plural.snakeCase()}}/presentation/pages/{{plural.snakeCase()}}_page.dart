@@ -16,7 +16,7 @@ class {{plural.pascalCase()}}Page extends HookConsumerWidget {
     ///
     return Scaffold(
         appBar: AppBar(
-        title: const Text('{{singular.pascalCase()}} Details'),
+        title: const Text('{{singular.pascalCase()}}'),
         actions: [
           RefreshButton(
             onPressed: () => ref.invalidate({{singular.camelCase()}}TableControllerProvider),
