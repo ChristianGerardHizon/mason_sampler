@@ -13,7 +13,7 @@ class {{singular.pascalCase()}}FormPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text('{{singular.pascalCase()}} Form Page')),
+      appBar: AppBar(title: Text(id == null ? 'New {{singular.pascalCase()}}' : 'Edit {{singular.pascalCase()}}')),
       body: {{singular.pascalCase()}}Form(id: id),
     );
   }
